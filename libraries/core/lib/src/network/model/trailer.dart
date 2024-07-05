@@ -22,18 +22,18 @@ class ResultTrailer extends Equatable {
 @JsonSerializable()
 class Trailer extends Equatable {
   @JsonKey(name: 'id')
-  final String trailerId;
+  final String? trailerId;
 
   @JsonKey(name: 'key')
-  final String youtubeId;
+  final String? youtubeId;
 
   @JsonKey(name: 'name')
-  final String title;
+  final String? title;
 
   Trailer(this.trailerId, this.youtubeId, this.title);
 
   @override
-  List<Object> get props => [trailerId, youtubeId, title];
+  List<Object?> get props => [trailerId, youtubeId, title];
 
   factory Trailer.fromJson(Map<String, dynamic> json) =>
       _$TrailerFromJson(json);

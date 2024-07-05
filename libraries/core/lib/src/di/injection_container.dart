@@ -1,5 +1,4 @@
 import 'package:core/core.dart';
-import 'package:core/src/bloc/theme/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

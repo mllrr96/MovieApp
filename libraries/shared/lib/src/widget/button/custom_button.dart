@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
 class CustomButton extends StatefulWidget {
-  final Function onPressed;
+  final void Function() onPressed;
   final String text;
 
-  const CustomButton({Key key, this.onPressed, this.text}) : super(key: key);
-
+  CustomButton({
+    required this.onPressed,
+    required this.text,
+    super.key,
+  });
   @override
   _CustomButtonState createState() => _CustomButtonState();
 }
 
 class _CustomButtonState extends State<CustomButton>
     with TickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation<double> _animationTween;
+  late AnimationController _animationController;
+  late Animation<double> _animationTween;
 
   @override
   void initState() {
@@ -55,13 +58,13 @@ class _CustomButtonState extends State<CustomButton>
       child: Container(
         width: Sizes.width(context) * .9,
         height: Sizes.width(context) / 7,
-        child: FlatButton(
-          color: ColorPalettes.darkAccent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              Sizes.dp10(context),
-            ),
-          ),
+        child: ElevatedButton(
+          // color: ColorPalettes.darkAccent,
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(
+          //     Sizes.dp10(context),
+          //   ),
+          // ),
           onPressed: widget.onPressed,
           child: Text(
             widget.text,

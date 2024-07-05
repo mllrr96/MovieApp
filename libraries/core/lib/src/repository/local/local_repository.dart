@@ -1,46 +1,45 @@
 import 'dart:convert';
 
 import 'package:core/core.dart';
-import 'package:core/src/local/shared_pref_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:shared/shared.dart';
 
 class LocalRepository implements Repository {
   final SharedPrefHelper prefHelper;
 
-  LocalRepository({@required this.prefHelper});
+  LocalRepository({required this.prefHelper});
 
   @override
-  Future<Result> getMovieNowPlaying(
+  Future<Result?> getMovieNowPlaying(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
-    var fromCache = await prefHelper.getCache(AppConstant.MOVIE_NOW_PLAYING);
+    String? fromCache =
+        await prefHelper.getCache(AppConstant.MOVIE_NOW_PLAYING);
     if (fromCache != null) {
-      Map json = jsonDecode(fromCache);
+      Map<String, dynamic> json = jsonDecode(fromCache);
       return Result.fromJson(json);
     }
     return null;
   }
 
   @override
-  Future<Result> getMovieUpComing(
+  Future<Result?> getMovieUpComing(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     var fromCache = await prefHelper.getCache(AppConstant.MOVIE_UP_COMING);
     if (fromCache != null) {
-      Map json = jsonDecode(fromCache);
+      Map<String, dynamic> json = jsonDecode(fromCache);
       return Result.fromJson(json);
     }
     return null;
   }
 
   @override
-  Future<Result> getMoviePopular(
+  Future<Result?> getMoviePopular(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     var fromCache = await prefHelper.getCache(AppConstant.MOVIE_POPULAR);
     if (fromCache != null) {
-      Map json = jsonDecode(fromCache);
+      Map<String, dynamic> json = jsonDecode(fromCache);
       return Result.fromJson(json);
     }
     return null;
@@ -61,36 +60,36 @@ class LocalRepository implements Repository {
   }
 
   @override
-  Future<Result> getTvAiringToday(
+  Future<Result?> getTvAiringToday(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     var fromCache = await prefHelper.getCache(AppConstant.TV_AIRING_TODAY);
     if (fromCache != null) {
-      Map json = jsonDecode(fromCache);
+      Map<String, dynamic> json = jsonDecode(fromCache);
       return Result.fromJson(json);
     }
     return null;
   }
 
   @override
-  Future<Result> getTvPopular(
+  Future<Result?> getTvPopular(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     var fromCache = await prefHelper.getCache(AppConstant.TV_POPULAR);
     if (fromCache != null) {
-      Map json = jsonDecode(fromCache);
+      Map<String, dynamic> json = jsonDecode(fromCache);
       return Result.fromJson(json);
     }
     return null;
   }
 
   @override
-  Future<Result> getTvOnTheAir(
+  Future<Result?> getTvOnTheAir(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     var fromCache = await prefHelper.getCache(AppConstant.TV_ON_THE_AIR);
     if (fromCache != null) {
-      Map json = jsonDecode(fromCache);
+      Map<String, dynamic> json = jsonDecode(fromCache);
       return Result.fromJson(json);
     }
     return null;
@@ -110,8 +109,8 @@ class LocalRepository implements Repository {
   }
 
   @override
-  Future<ResultCrew> getMovieCrew(
-      [int movieId,
+  Future<ResultCrew?> getMovieCrew(
+      [int movieId = 0,
       String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) {
     throw UnimplementedError();
@@ -126,7 +125,7 @@ class LocalRepository implements Repository {
 
   @override
   Future<ResultCrew> getTvShowCrew(
-      [int tvId,
+      [int tvId = 0,
       String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) {
     throw UnimplementedError();
@@ -140,12 +139,12 @@ class LocalRepository implements Repository {
   }
 
   @override
-  Future<Result> getDiscoverMovie(
+  Future<Result?> getDiscoverMovie(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     var fromCache = await prefHelper.getCache(AppConstant.DISCOVER_MOVIE);
     if (fromCache != null) {
-      Map json = jsonDecode(fromCache);
+      Map<String, dynamic> json = jsonDecode(fromCache);
       return Result.fromJson(json);
     }
     return null;

@@ -7,15 +7,11 @@ class TimeWidget extends StatefulWidget {
 }
 
 class _TimeWidgetState extends State<TimeWidget> with TickerProviderStateMixin {
-  var _timeSelectorAcList = List<AnimationController>();
-  var _timeSelectorTweenList = List<Animation<double>>();
-  bool _isDarkTheme;
+  var _timeSelectorAcList = <AnimationController>[];
+  var _timeSelectorTweenList = <Animation<double>>[];
 
-  var _time = [
-    ["01.30", 45],
-    ["06.30", 45],
-    ["10.30", 45]
-  ];
+  Map<String, int> _time = {"01.30": 45, "06.30": 45, "10.30": 45};
+
   var _timeIndexSelected = 1;
 
   @override
@@ -36,8 +32,6 @@ class _TimeWidgetState extends State<TimeWidget> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    _isDarkTheme = themeData.appBarTheme?.color == null;
     return Container(
       width: Sizes.width(context),
       height: Sizes.width(context) / 5,
@@ -62,8 +56,8 @@ class _TimeWidgetState extends State<TimeWidget> with TickerProviderStateMixin {
                 });
               },
               child: _timeItem(
-                _time[index][0],
-                _time[index][1],
+                _time.keys.elementAt(index),
+                _time.values.elementAt(index),
                 index == _timeIndexSelected ? true : false,
               ),
             ),
@@ -74,7 +68,7 @@ class _TimeWidgetState extends State<TimeWidget> with TickerProviderStateMixin {
   }
 
   Color _textTimeColor(bool active) {
-    if (!_isDarkTheme) {
+    if (Theme.of(context).brightness != Brightness.dark) {
       if (active) {
         return ColorPalettes.darkAccent;
       } else {

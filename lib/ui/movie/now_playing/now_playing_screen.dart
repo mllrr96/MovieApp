@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
 import 'package:shared/shared.dart';
@@ -15,7 +14,7 @@ class NowPlayingScreen extends StatefulWidget {
 }
 
 class _NowPlayingScreenState extends State<NowPlayingScreen> {
-  Completer<void> _refreshCompleter;
+  late Completer<void> _refreshCompleter;
 
   _loadMovieNowPlaying(BuildContext context) {
     context.read<MovieNowPlayingBloc>().add(LoadMovieNowPlaying());
@@ -46,19 +45,21 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
         child: BlocBuilder<MovieNowPlayingBloc, MovieNowPlayingState>(
           builder: (context, state) {
             if (state is MovieNowPlayingHasData) {
-              _refreshCompleter?.complete();
+              _refreshCompleter.complete();
               _refreshCompleter = Completer();
               return ListView.builder(
                 itemCount: state.result.results.length,
                 itemBuilder: (BuildContext context, int index) {
                   Movies movies = state.result.results[index];
                   return CardMovies(
-                    image: movies.posterPath,
-                    title: movies.title,
+                    image: movies.posterPath ?? '',
+                    title: movies.title ?? '',
                     vote: movies.voteAverage.toString(),
-                    releaseDate: movies.releaseDate,
-                    overview: movies.overview,
-                    genre: movies.genreIds.take(3).map(buildGenreChip).toList(),
+                    releaseDate: movies.releaseDate ?? '',
+                    overview: movies.overview ?? '',
+                    genre:
+                        movies.genreIds?.take(3).map(buildGenreChip).toList() ??
+                            [],
                     onTap: () {
                       Navigation.intentWithData(
                         context,
@@ -72,15 +73,15 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             } else if (state is MovieNowPlayingLoading) {
               return ShimmerList();
             } else if (state is MovieNowPlayingError) {
-              _refreshCompleter?.complete();
+              _refreshCompleter.complete();
               _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.errorMessage);
             } else if (state is MovieNowPlayingNoData) {
-              _refreshCompleter?.complete();
+              _refreshCompleter.complete();
               _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.message);
             } else if (state is MovieNowPlayingNoInternetConnection) {
-              _refreshCompleter?.complete();
+              _refreshCompleter.complete();
               _refreshCompleter = Completer();
               return NoInternetWidget(
                 message: AppConstant.noInternetConnection,

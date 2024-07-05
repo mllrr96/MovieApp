@@ -1,5 +1,4 @@
 import 'package:core/core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moviecatalogue/ui/about/about_screen.dart';
 import 'package:package_info/package_info.dart';
@@ -60,11 +59,12 @@ class SettingScreen extends StatelessWidget {
                         return BlocBuilder<ThemeBloc, ThemeState>(
                           builder: (context, state) {
                             return CustomDialog(
-                              groupValue: state is ThemeState
-                                  ? state.isDarkTheme
-                                  : false,
+                              groupValue: state.isDarkTheme,
                               onChanged: (value) {
-                                context.read<ThemeBloc>().add(ThemeChanged(isDarkTheme: value));
+                                if (value == null) return;
+                                context
+                                    .read<ThemeBloc>()
+                                    .add(ThemeChanged(isDarkTheme: value));
                               },
                             );
                           },

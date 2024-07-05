@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
 import 'package:moviecatalogue/ui/menu/menu.dart';
@@ -17,7 +16,7 @@ class TvShowScreen extends StatefulWidget {
 }
 
 class _TvShowScreenState extends State<TvShowScreen> {
-  Completer<void> _refreshCompleter;
+  late Completer<void> _refreshCompleter;
   int _current = 0;
 
   _loadTvOnAir(BuildContext context) {
@@ -111,7 +110,7 @@ class _TvShowScreenState extends State<TvShowScreen> {
     return BlocBuilder<TvOnTheAirBloc, TvOnTheAirState>(
       builder: (context, state) {
         if (state is TvOnTheAirHasData) {
-          _refreshCompleter?.complete();
+          _refreshCompleter.complete();
           _refreshCompleter = Completer();
           return BannerHome(
             isFromMovie: false,
@@ -128,15 +127,15 @@ class _TvShowScreenState extends State<TvShowScreen> {
         } else if (state is TvOnTheAirLoading) {
           return ShimmerBanner();
         } else if (state is TvOnTheAirError) {
-          _refreshCompleter?.complete();
+          _refreshCompleter.complete();
           _refreshCompleter = Completer();
           return CustomErrorWidget(message: state.errorMessage);
         } else if (state is TvOnTheAirNoData) {
-          _refreshCompleter?.complete();
+          _refreshCompleter.complete();
           _refreshCompleter = Completer();
           return CustomErrorWidget(message: state.message);
         } else if (state is TvOnTheAirNoInternetConnection) {
-          _refreshCompleter?.complete();
+          _refreshCompleter.complete();
           _refreshCompleter = Completer();
           return NoInternetWidget(
             message: AppConstant.noInternetConnection,
@@ -183,7 +182,7 @@ class _TvShowScreenState extends State<TvShowScreen> {
           child: BlocBuilder<TvAiringTodayBloc, TvAiringTodayState>(
             builder: (context, state) {
               if (state is TvAiringTodayHasData) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return ListView.builder(
                   shrinkWrap: true,
@@ -195,9 +194,9 @@ class _TvShowScreenState extends State<TvShowScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     Movies movies = state.result.results[index];
                     return CardHome(
-                      image: movies.posterPath,
-                      title: movies.tvName,
-                      rating: movies.voteAverage,
+                      image: movies.posterPath ?? '',
+                      title: movies.tvName ?? '',
+                      rating: movies.voteAverage ?? 0.0,
                       onTap: () {
                         Navigation.intentWithData(
                           context,
@@ -211,15 +210,15 @@ class _TvShowScreenState extends State<TvShowScreen> {
               } else if (state is TvAiringTodayLoading) {
                 return ShimmerCard();
               } else if (state is TvAiringTodayError) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.errorMessage);
               } else if (state is TvAiringTodayNoData) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.message);
               } else if (state is TvAiringTodayNoInternetConnection) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return NoInternetWidget(
                   message: AppConstant.noInternetConnection,
@@ -269,7 +268,7 @@ class _TvShowScreenState extends State<TvShowScreen> {
           child: BlocBuilder<TvPopularBloc, TvPopularState>(
             builder: (context, state) {
               if (state is TvPopularHasData) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return ListView.builder(
                   shrinkWrap: true,
@@ -281,9 +280,9 @@ class _TvShowScreenState extends State<TvShowScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     Movies movies = state.result.results[index];
                     return CardHome(
-                      image: movies.posterPath,
-                      title: movies.tvName,
-                      rating: movies.voteAverage,
+                      image: movies.posterPath ?? '',
+                      title: movies.tvName ?? '',
+                      rating: movies.voteAverage ?? 0.0,
                       onTap: () {
                         Navigation.intentWithData(
                           context,
@@ -297,15 +296,15 @@ class _TvShowScreenState extends State<TvShowScreen> {
               } else if (state is TvPopularLoading) {
                 return ShimmerCard();
               } else if (state is TvPopularError) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.errorMessage);
               } else if (state is TvPopularNoData) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.message);
               } else if (state is TvPopularNoInternetConnection) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return NoInternetWidget(
                   message: AppConstant.noInternetConnection,

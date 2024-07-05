@@ -22,18 +22,18 @@ class ResultCrew extends Equatable {
 @JsonSerializable()
 class Crew extends Equatable {
   @JsonKey(name: 'name')
-  final String realName;
+  final String? realName;
 
   @JsonKey(name: 'character')
-  final String characterName;
+  final String? characterName;
 
   @JsonKey(name: 'profile_path')
-  final String profile;
+  final String? profile;
 
   Crew(this.realName, this.characterName, this.profile);
 
   @override
-  List<Object> get props => [realName, characterName, profile];
+  List<Object?> get props => [realName, characterName, profile];
 
   factory Crew.fromJson(Map<String, dynamic> json) => _$CrewFromJson(json);
 

@@ -4,8 +4,10 @@ import 'package:shared/shared.dart';
 class RatingInformation extends StatelessWidget {
   final double rating;
 
-  const RatingInformation({Key key, this.rating}) : super(key: key);
-
+  RatingInformation({
+    required this.rating,
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -16,7 +18,7 @@ class RatingInformation extends StatelessWidget {
         Text(rating.toString(),
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: theme.accentColor,
+              // color: theme.accentColor,
               fontSize: Sizes.dp16(context),
             )),
         SizedBox(height: Sizes.dp4(context)),
@@ -55,7 +57,9 @@ class RatingInformation extends StatelessWidget {
 Widget buildRatingBar(ThemeData theme, BuildContext context, double rating) {
   var stars = <Widget>[];
   for (var i = 1; i <= 5; i++) {
-    var color = i <= rating / 2 ? theme.accentColor : ColorPalettes.grey;
+    // var color = i <= rating / 2 ? theme.accentColor : ColorPalettes.grey;
+    var color =
+        i <= rating / 2 ? theme.colorScheme.secondary : ColorPalettes.grey;
     var star = Icon(
       Icons.star,
       color: color,

@@ -5,13 +5,13 @@ author:
 homepage:
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.17.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  json_serializable: ^3.5.1
+  json_serializable: ^6.8.0
 
   # This is our modular
   dependencies:

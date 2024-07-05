@@ -15,7 +15,7 @@ class MovieUpComingLoading extends MovieUpComingState {}
 class MovieUpComingHasData extends MovieUpComingState {
   final Result result;
 
-  const MovieUpComingHasData([this.result]);
+  const MovieUpComingHasData(this.result);
 
   @override
   List<Object> get props => [result];

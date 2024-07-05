@@ -7,16 +7,17 @@ class BookingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var _isDarkTheme = themeData.appBarTheme?.color == null;
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    final themeData = Theme.of(context);
+    final _isDarkTheme = themeData.brightness == Brightness.dark;
+    final ScreenArguments? args =
+        ModalRoute.of(context)?.settings.arguments as ScreenArguments?;
     return Scaffold(
       backgroundColor:
           !_isDarkTheme ? ColorPalettes.darkPrimary : ColorPalettes.white,
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text(args.movies.title ?? args.movies.tvName),
+        title: Text(args?.movies.title ?? args?.movies.tvName ?? ''),
       ),
       body: SingleChildScrollView(
         physics: ClampingScrollPhysics(),
@@ -26,7 +27,7 @@ class BookingScreen extends StatelessWidget {
             children: <Widget>[
               DateWidget(),
               TimeWidget(),
-              CinemaWidget(movieBackground: args.movies.backdropPath),
+              CinemaWidget(movieBackground: args?.movies.backdropPath ?? ''),
               Padding(
                 padding: EdgeInsets.only(
                   top: Sizes.dp20(context),

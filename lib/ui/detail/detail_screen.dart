@@ -11,7 +11,7 @@ class DetailScreen extends StatefulWidget {
 
   final ScreenArguments arguments;
 
-  const DetailScreen({Key key, @required this.arguments});
+  const DetailScreen({super.key, required this.arguments});
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -37,7 +37,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    // var theme = Theme.of(context);
     return Scaffold(
       body: SingleChildScrollView(
         physics: ClampingScrollPhysics(),
@@ -49,16 +49,17 @@ class _DetailScreenState extends State<DetailScreen> {
                 CardMoviesHeader(
                   isFromBanner: widget.arguments.isFromBanner,
                   idMovie: widget.arguments.movies.id,
-                  title: widget.arguments.movies.title ??
-                      widget.arguments.movies.tvName,
+                  title: widget.arguments.movies.title ?? '',
                   imageBanner:
-                      widget.arguments.movies.backdropPath.imageOriginal,
-                  imagePoster: widget.arguments.movies.posterPath.imageOriginal,
-                  rating: widget.arguments.movies.voteAverage,
+                      widget.arguments.movies.backdropPath?.imageOriginal ?? '',
+                  imagePoster:
+                      widget.arguments.movies.posterPath?.imageOriginal ?? '',
+                  rating: widget.arguments.movies.voteAverage ?? 0.0,
                   genre: widget.arguments.movies.genreIds
-                      .take(3)
-                      .map(buildGenreChip)
-                      .toList(),
+                          ?.take(3)
+                          .map(buildGenreChip)
+                          .toList() ??
+                      [],
                 ),
                 Padding(
                   padding: EdgeInsets.all(Sizes.dp20(context)),
@@ -74,7 +75,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                       SizedBox(height: Sizes.dp8(context)),
                       Text(
-                        widget.arguments.movies.overview,
+                        widget.arguments.movies.overview ?? '',
                       ),
                     ],
                   ),
@@ -116,7 +117,7 @@ class _DetailScreenState extends State<DetailScreen> {
               right: Sizes.dp5(context),
               child: IconButton(
                 iconSize: Sizes.dp30(context),
-                color: theme.accentColor,
+                // color: theme.accentColor,
                 icon: Icon(Icons.favorite_border),
                 onPressed: () {
                   PopUp.showSuccess("Add to Favorite");
@@ -165,8 +166,8 @@ class _DetailScreenState extends State<DetailScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     Trailer trailer = state.trailer.trailer[index];
                     return CardTrailer(
-                      title: trailer.title,
-                      youtube: trailer.youtubeId,
+                      title: trailer.title ?? '',
+                      youtube: trailer.youtubeId ?? '',
                       length: state.trailer.trailer.length,
                       onExitFullScreen: () {
                         // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
@@ -224,8 +225,8 @@ class _DetailScreenState extends State<DetailScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     Crew crew = state.crew.crew[index];
                     return CardCrew(
-                      image: crew.profile,
-                      name: crew.characterName,
+                      image: crew.profile ?? '',
+                      name: crew.characterName ?? '',
                     );
                   },
                 );

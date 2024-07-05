@@ -6,8 +6,12 @@ class CardPortfolio extends StatelessWidget {
   final String title;
   final String url;
 
-  const CardPortfolio({Key key, this.imageAsset, this.title, this.url})
-      : super(key: key);
+  CardPortfolio({
+    required this.imageAsset,
+    required this.title,
+    required this.url,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

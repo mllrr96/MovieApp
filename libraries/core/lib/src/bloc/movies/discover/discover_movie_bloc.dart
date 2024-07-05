@@ -1,38 +1,36 @@
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared/shared.dart';
 
 class DiscoverMovieBloc extends Bloc<DiscoverMovieEvent, DiscoverMovieState> {
   final Repository repository;
 
-  DiscoverMovieBloc({this.repository}) : super(InitialDiscoverMovie());
-
-  @override
-  Stream<DiscoverMovieState> mapEventToState(DiscoverMovieEvent event) async* {
-    if (event is LoadDiscoverMovie) {
-      yield* _mapLoadDiscoverMovieToState();
-    }
+  DiscoverMovieBloc({required this.repository})
+      : super(InitialDiscoverMovie()) {
+    on<LoadDiscoverMovie>(_loadDiscoverMovie);
   }
 
-  Stream<DiscoverMovieState> _mapLoadDiscoverMovieToState() async* {
+  void _loadDiscoverMovie(
+    LoadDiscoverMovie event,
+    Emitter<DiscoverMovieState> emit,
+  ) async {
     try {
-      yield DiscoverMovieLoading();
+      emit(DiscoverMovieLoading());
       var movies = await repository.getDiscoverMovie(
           ApiConstant.apiKey, ApiConstant.language);
-      if (movies.results.isEmpty) {
-        yield DiscoverMovieNoData(AppConstant.noData);
+      if (movies?.results.isEmpty ?? true) {
+        emit(DiscoverMovieNoData(AppConstant.noData));
       } else {
-        yield DiscoverMovieHasData(movies);
+        emit(DiscoverMovieHasData(movies!));
       }
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.CONNECT_TIMEOUT ||
-          e.type == DioErrorType.RECEIVE_TIMEOUT) {
-        yield DiscoverMovieNoInternetConnection();
-      } else if (e.type == DioErrorType.DEFAULT) {
-        yield DiscoverMovieNoInternetConnection();
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        emit(DiscoverMovieNoInternetConnection());
+      } else if (e.type == DioExceptionType.connectionError) {
+        emit(DiscoverMovieNoInternetConnection());
       } else {
-        yield DiscoverMovieError(e.toString());
+        emit(DiscoverMovieError(e.toString()));
       }
     }
   }

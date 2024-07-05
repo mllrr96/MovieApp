@@ -15,7 +15,7 @@ class MovieNowPlayingLoading extends MovieNowPlayingState {}
 class MovieNowPlayingHasData extends MovieNowPlayingState {
   final Result result;
 
-  const MovieNowPlayingHasData([this.result]);
+  const MovieNowPlayingHasData(this.result);
 
   @override
   List<Object> get props => [result];

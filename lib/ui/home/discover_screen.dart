@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
 import 'package:shared/shared.dart';
 
@@ -51,7 +50,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                     alignment: Alignment.topCenter,
                     children: <Widget>[
                       CachedNetworkImage(
-                        imageUrl: movie.backdropPath.imageOriginal,
+                        imageUrl: movie.backdropPath?.imageOriginal ?? '',
                         width: Sizes.width(context),
                         height: Sizes.height(context),
                         fit: BoxFit.cover,
@@ -77,10 +76,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       Align(
                         alignment: Alignment.center,
                         child: CardDiscover(
-                          image: movie.posterPath,
-                          title: movie.title,
-                          rating: movie.voteAverage,
-                          genre: movie.genreIds,
+                          image: movie.posterPath ?? '',
+                          title: movie.title ?? '',
+                          rating: movie.voteAverage ?? 0.0,
+                          genre: movie.genreIds ?? [],
                           onTap: () {
                             Navigation.intentWithData(
                               context,

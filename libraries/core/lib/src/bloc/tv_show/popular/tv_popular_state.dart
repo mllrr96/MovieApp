@@ -15,7 +15,7 @@ class TvPopularLoading extends TvPopularState {}
 class TvPopularHasData extends TvPopularState {
   final Result result;
 
-  const TvPopularHasData([this.result]);
+  const TvPopularHasData(this.result);
 
   @override
   List<Object> get props => [result];

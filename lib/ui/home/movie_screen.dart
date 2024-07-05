@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
 import 'package:moviecatalogue/ui/menu/menu.dart';
@@ -17,7 +16,7 @@ class MovieScreen extends StatefulWidget {
 }
 
 class _MovieScreenState extends State<MovieScreen> {
-  Completer<void> _refreshCompleter;
+  late Completer<void> _refreshCompleter;
   int _current = 0;
 
   _loadMovieNowPlaying(BuildContext context) {
@@ -111,7 +110,7 @@ class _MovieScreenState extends State<MovieScreen> {
     return BlocBuilder<MovieNowPlayingBloc, MovieNowPlayingState>(
       builder: (context, state) {
         if (state is MovieNowPlayingHasData) {
-          _refreshCompleter?.complete();
+          _refreshCompleter.complete();
           _refreshCompleter = Completer();
           return BannerHome(
             isFromMovie: true,
@@ -128,15 +127,15 @@ class _MovieScreenState extends State<MovieScreen> {
         } else if (state is MovieNowPlayingLoading) {
           return ShimmerBanner();
         } else if (state is MovieNowPlayingError) {
-          _refreshCompleter?.complete();
+          _refreshCompleter.complete();
           _refreshCompleter = Completer();
           return CustomErrorWidget(message: state.errorMessage);
         } else if (state is MovieNowPlayingNoData) {
-          _refreshCompleter?.complete();
+          _refreshCompleter.complete();
           _refreshCompleter = Completer();
           return CustomErrorWidget(message: state.message);
         } else if (state is MovieNowPlayingNoInternetConnection) {
-          _refreshCompleter?.complete();
+          _refreshCompleter.complete();
           _refreshCompleter = Completer();
           return NoInternetWidget(
             message: AppConstant.noInternetConnection,
@@ -183,7 +182,7 @@ class _MovieScreenState extends State<MovieScreen> {
           child: BlocBuilder<MovieUpComingBloc, MovieUpComingState>(
             builder: (context, state) {
               if (state is MovieUpComingHasData) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return ListView.builder(
                   shrinkWrap: true,
@@ -195,9 +194,9 @@ class _MovieScreenState extends State<MovieScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     Movies movies = state.result.results[index];
                     return CardHome(
-                      image: movies.posterPath,
-                      title: movies.title,
-                      rating: movies.voteAverage,
+                      image: movies.posterPath ?? '',
+                      title: movies.title ?? '',
+                      rating: movies.voteAverage ?? 0.0,
                       onTap: () {
                         Navigation.intentWithData(
                           context,
@@ -211,15 +210,15 @@ class _MovieScreenState extends State<MovieScreen> {
               } else if (state is MovieUpComingLoading) {
                 return ShimmerCard();
               } else if (state is MovieUpComingError) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.errorMessage);
               } else if (state is MovieUpComingNoData) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.message);
               } else if (state is MovieUpComingNoInternetConnection) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return NoInternetWidget(
                   message: AppConstant.noInternetConnection,
@@ -269,7 +268,7 @@ class _MovieScreenState extends State<MovieScreen> {
           child: BlocBuilder<MoviePopularBloc, MoviePopularState>(
             builder: (context, state) {
               if (state is MoviePopularHasData) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return ListView.builder(
                   shrinkWrap: true,
@@ -281,9 +280,9 @@ class _MovieScreenState extends State<MovieScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     Movies movies = state.result.results[index];
                     return CardHome(
-                      image: movies.posterPath,
-                      title: movies.title,
-                      rating: movies.voteAverage,
+                      image: movies.posterPath ?? '',
+                      title: movies.title ?? '',
+                      rating: movies.voteAverage ?? 0.0,
                       onTap: () {
                         Navigation.intentWithData(
                           context,
@@ -297,15 +296,15 @@ class _MovieScreenState extends State<MovieScreen> {
               } else if (state is MoviePopularLoading) {
                 return ShimmerCard();
               } else if (state is MoviePopularError) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.errorMessage);
               } else if (state is MoviePopularNoData) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.message);
               } else if (state is MoviePopularNoInternetConnection) {
-                _refreshCompleter?.complete();
+                _refreshCompleter.complete();
                 _refreshCompleter = Completer();
                 return NoInternetWidget(
                   message: AppConstant.noInternetConnection,

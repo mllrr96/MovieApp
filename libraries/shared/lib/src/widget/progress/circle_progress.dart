@@ -4,7 +4,10 @@ import 'package:shared/shared.dart';
 class CircleProgress extends StatelessWidget {
   final String vote;
 
-  const CircleProgress({Key key, this.vote}) : super(key: key);
+  CircleProgress({
+    required this.vote,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

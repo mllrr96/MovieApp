@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Navigation {
-
   static back(BuildContext context) {
     Navigator.pop(context);
   }
@@ -16,15 +15,13 @@ class Navigation {
   }
 
   static intentWithClearAllRoutes(BuildContext context, String nameRouted) {
-    Navigator.of(context).pushNamedAndRemoveUntil(nameRouted, (Route<dynamic> route) => false);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(nameRouted, (Route<dynamic> route) => false);
   }
 
-  static intentWithData(BuildContext context, String nameRouted, Object argumentClass) {
-    Navigator.pushNamed(
-        context,
-        nameRouted,
-        arguments: argumentClass
-    );
+  static intentWithData(
+      BuildContext context, String nameRouted, Object argumentClass) {
+    Navigator.pushNamed(context, nameRouted, arguments: argumentClass);
   }
 
   // URL valid for this plugin only are
@@ -37,11 +34,10 @@ class Navigation {
   // www.flutter.dev
   // flutter.dev
   static launchURL(url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+    try {
+      await launchUrl(url);
+    } catch (e) {
+      print(e);
     }
   }
-
 }

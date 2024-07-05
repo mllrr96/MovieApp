@@ -1,12 +1,10 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefHelper {
   final SharedPreferences preferences;
 
-  SharedPrefHelper({@required this.preferences});
+  SharedPrefHelper({required this.preferences});
 
   static const _LAST_CHECKED = "last_checked";
   static const _CHECK_INTERVAL = "check_interval";
@@ -15,7 +13,7 @@ class SharedPrefHelper {
 
   // Interval 600000 means handle cache for 600000 milliseconds or 10 minutes
   Future<bool> storeCache(String key, String json,
-      {int lastChecked, int interval = 600000}) {
+      {int? lastChecked, int interval = 600000}) {
     if (lastChecked == null) {
       lastChecked = DateTime.now().millisecondsSinceEpoch;
     }
@@ -28,8 +26,11 @@ class SharedPrefHelper {
         }));
   }
 
-  Future<String> getCache(String key) async {
-    Map map = jsonDecode(preferences.getString(key));
+  Future<String?> getCache(String key) async {
+    if (preferences.getString(key) == null) {
+      return null;
+    }
+    Map map = jsonDecode(preferences.getString(key)!);
     // if outdated, clear and return null
     var lastChecked = map[_LAST_CHECKED];
     var interval = map[_CHECK_INTERVAL];
@@ -40,8 +41,11 @@ class SharedPrefHelper {
     return map[_DATA];
   }
 
-  Future<Map> getFullCache(String key) async {
-    Map map = jsonDecode(preferences.getString(key));
+  Future<Map?> getFullCache(String key) async {
+    if (preferences.getString(key) == null) {
+      return null;
+    }
+    Map map = jsonDecode(preferences.getString(key)!);
     // if outdated, clear and return null
     var lastChecked = map[_LAST_CHECKED];
     var interval = map[_CHECK_INTERVAL];

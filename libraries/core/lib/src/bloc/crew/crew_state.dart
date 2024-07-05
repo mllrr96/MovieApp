@@ -15,7 +15,7 @@ class CrewLoading extends CrewState {}
 class CrewHasData extends CrewState {
   final ResultCrew crew;
 
-  const CrewHasData([this.crew]);
+  const CrewHasData(this.crew);
 
   @override
   List<Object> get props => [crew];

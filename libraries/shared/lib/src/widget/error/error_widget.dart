@@ -4,7 +4,10 @@ import 'package:shared/shared.dart';
 class CustomErrorWidget extends StatelessWidget {
   final String message;
 
-  const CustomErrorWidget({Key key, this.message}) : super(key: key);
+  CustomErrorWidget({
+    required this.message,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,49 +1,49 @@
 import 'package:core/core.dart';
 
 abstract class Repository {
-  Future<Result> getMovieNowPlaying(
+  Future<Result?> getMovieNowPlaying(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<Result> getMovieUpComing(
+  Future<Result?> getMovieUpComing(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<Result> getMoviePopular(
+  Future<Result?> getMoviePopular(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<Result> getTvAiringToday(
+  Future<Result?> getTvAiringToday(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<Result> getTvPopular(
+  Future<Result?> getTvPopular(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<Result> getTvOnTheAir(
+  Future<Result?> getTvOnTheAir(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<ResultCrew> getMovieCrew(
+  Future<ResultCrew?> getMovieCrew(
       [int movieId,
       String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<ResultTrailer> getMovieTrailer(int movieId,
+  Future<ResultTrailer?> getMovieTrailer(int movieId,
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<ResultCrew> getTvShowCrew(
+  Future<ResultCrew?> getTvShowCrew(
       [int tvId,
       String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<ResultTrailer> getTvShowTrailer(int tvId,
+  Future<ResultTrailer?> getTvShowTrailer(int tvId,
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]);
 
-  Future<Result> getDiscoverMovie(
+  Future<Result?> getDiscoverMovie(
       [String apiKey = ApiConstant.apiKey,
-        String language = ApiConstant.language]);
+      String language = ApiConstant.language]);
 }

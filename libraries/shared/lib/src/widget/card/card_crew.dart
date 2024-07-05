@@ -5,8 +5,11 @@ import 'package:shared/shared.dart';
 class CardCrew extends StatelessWidget {
   final String image, name;
 
-  const CardCrew({Key key, this.image, this.name}) : super(key: key);
-
+  CardCrew({
+    required this.image,
+    required this.name,
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(

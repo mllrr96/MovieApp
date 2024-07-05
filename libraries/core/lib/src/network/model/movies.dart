@@ -24,34 +24,34 @@ class Movies extends Equatable {
   final int id;
 
   @JsonKey(name: 'title')
-  final String title;
+  final String? title;
 
   @JsonKey(name: 'overview')
-  final String overview;
+  final String? overview;
 
   @JsonKey(name: 'release_date')
-  final String releaseDate;
+  final String? releaseDate;
 
   @JsonKey(name: 'genre_ids')
-  final List<int> genreIds;
+  final List<int>? genreIds;
 
   @JsonKey(name: 'vote_average')
-  final double voteAverage;
+  final double? voteAverage;
 
   @JsonKey(name: 'popularity')
-  final double popularity;
+  final double? popularity;
 
   @JsonKey(name: 'poster_path')
-  final String posterPath;
+  final String? posterPath;
 
   @JsonKey(name: 'backdrop_path')
-  final String backdropPath;
+  final String? backdropPath;
 
   @JsonKey(name: 'original_name')
-  final String tvName;
+  final String? tvName;
 
   @JsonKey(name: 'first_air_date')
-  final String tvRelease;
+  final String? tvRelease;
 
   Movies(
       this.id,
@@ -67,7 +67,7 @@ class Movies extends Equatable {
       this.tvRelease);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         title,
         overview,

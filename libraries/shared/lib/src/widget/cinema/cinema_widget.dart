@@ -6,19 +6,20 @@ import 'package:shared/src/common/utils/chair_constant.dart';
 class CinemaWidget extends StatefulWidget {
   final String movieBackground;
 
-  const CinemaWidget({Key key, this.movieBackground}) : super(key: key);
-
+  CinemaWidget({
+    required this.movieBackground,
+    super.key,
+  });
   @override
   _CinemaWidgetState createState() => _CinemaWidgetState();
 }
 
 class _CinemaWidgetState extends State<CinemaWidget>
     with TickerProviderStateMixin {
-  AnimationController _cinemaChairAc;
-  Animation<double> _cinemaChairTween;
-  AnimationController _cinemaScreenAc;
-  Animation<double> _cinemaScreenTween;
-  bool _isDarkTheme;
+  late AnimationController _cinemaChairAc;
+  late Animation<double> _cinemaChairTween;
+  late AnimationController _cinemaScreenAc;
+  late Animation<double> _cinemaScreenTween;
 
   var _chairStatus = [
     [0, 3, 2, 1, 2, 2, 0],
@@ -63,8 +64,6 @@ class _CinemaWidgetState extends State<CinemaWidget>
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    _isDarkTheme = themeData.appBarTheme?.color == null;
     return Column(
       children: <Widget>[
         AnimatedBuilder(
@@ -115,6 +114,7 @@ class _CinemaWidgetState extends State<CinemaWidget>
     // 2 is reserved
     // 3 is not available
     // 4 is yours
+    bool _isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: <Widget>[
         for (int i = 0; i < 6; i++)
@@ -169,8 +169,8 @@ class _CinemaWidgetState extends State<CinemaWidget>
             children: <Widget>[
               _chairCategory(ColorPalettes.white, "FREE", true),
               _chairCategory(ColorPalettes.darkAccent, "YOURS", false),
-              _chairCategory(Colors.grey[700], "RESERVED", false),
-              _chairCategory(Colors.red[800], "NOT AVAILABLE", false),
+              _chairCategory(Colors.grey[700]!, "RESERVED", false),
+              _chairCategory(Colors.red[800]!, "NOT AVAILABLE", false),
             ],
           ),
         ),
@@ -179,6 +179,7 @@ class _CinemaWidgetState extends State<CinemaWidget>
   }
 
   Color _borderColor(bool isWhite) {
+    bool _isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     if (!_isDarkTheme) {
       return ColorPalettes.transparent;
     } else {

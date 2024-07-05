@@ -4,18 +4,17 @@ import 'package:moviecatalogue/ui/home/movie_screen.dart';
 import 'package:moviecatalogue/ui/home/tv_show_screen.dart';
 import 'package:shared/shared.dart';
 
+
 class DashBoardScreen extends StatefulWidget {
   static const routeName = '/';
   final String title;
-
-  const DashBoardScreen({Key key, this.title}) : super(key: key);
-
+  DashBoardScreen({super.key, required this.title});
   @override
   _DashBoardScreenState createState() => _DashBoardScreenState();
 }
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
-  PageController _pageController;
+  PageController _pageController = PageController();
   int _page = 0;
 
   void _navigationTapped(int page) {
@@ -65,10 +64,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           // sets the background color of the `BottomNavigationBar`
           canvasColor: Theme.of(context).primaryColor,
           // sets the active color of the `BottomNavigationBar` if `Brightness` is light
-          primaryColor: Theme.of(context).accentColor,
-          textTheme: Theme.of(context).textTheme.copyWith(
-                caption: TextStyle(color: ColorPalettes.setActive),
-              ),
+          // primaryColor: Theme.of(context).accentColor,
+          // textTheme: Theme.of(context).textTheme.copyWith(
+          //       caption: TextStyle(color: ColorPalettes.setActive),
+          //     ),
         ),
         child: BottomAppBar(
           shape: CircularNotchedRectangle(),

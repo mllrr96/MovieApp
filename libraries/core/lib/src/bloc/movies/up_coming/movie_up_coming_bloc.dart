@@ -1,38 +1,36 @@
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared/shared.dart';
 
 class MovieUpComingBloc extends Bloc<MovieUpComingEvent, MovieUpComingState> {
   final Repository repository;
 
-  MovieUpComingBloc({this.repository}) : super(InitialMovieUpComing());
-
-  @override
-  Stream<MovieUpComingState> mapEventToState(MovieUpComingEvent event) async* {
-    if (event is LoadMovieUpComing) {
-      yield* _mapLoadNowPlayingToState();
-    }
+  MovieUpComingBloc({required this.repository})
+      : super(InitialMovieUpComing()) {
+    on<LoadMovieUpComing>(_loadMovieUpComing);
   }
 
-  Stream<MovieUpComingState> _mapLoadNowPlayingToState() async* {
+  void _loadMovieUpComing(
+    LoadMovieUpComing event,
+    Emitter<MovieUpComingState> emit,
+  ) async {
     try {
-      yield MovieUpComingLoading();
+      emit(MovieUpComingLoading());
       var movies = await repository.getMovieUpComing(
           ApiConstant.apiKey, ApiConstant.language);
-      if (movies.results.isEmpty) {
-        yield MovieUpComingNoData(AppConstant.noData);
+      if (movies?.results.isEmpty ?? true) {
+        emit(MovieUpComingNoData(AppConstant.noData));
       } else {
-        yield MovieUpComingHasData(movies);
+        emit(MovieUpComingHasData(movies!));
       }
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.CONNECT_TIMEOUT ||
-          e.type == DioErrorType.RECEIVE_TIMEOUT) {
-        yield MovieUpComingNoInternetConnection();
-      } else if (e.type == DioErrorType.DEFAULT) {
-        yield MovieUpComingNoInternetConnection();
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        emit(MovieUpComingNoInternetConnection());
+      } else if (e.type == DioExceptionType.connectionError) {
+        emit(MovieUpComingNoInternetConnection());
       } else {
-        yield MovieUpComingError(e.toString());
+        emit(MovieUpComingError(e.toString()));
       }
     }
   }

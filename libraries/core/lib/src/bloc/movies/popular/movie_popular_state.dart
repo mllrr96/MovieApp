@@ -15,7 +15,7 @@ class MoviePopularLoading extends MoviePopularState {}
 class MoviePopularHasData extends MoviePopularState {
   final Result result;
 
-  const MoviePopularHasData([this.result]);
+  const MoviePopularHasData(this.result);
 
   @override
   List<Object> get props => [result];

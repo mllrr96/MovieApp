@@ -1,38 +1,36 @@
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared/shared.dart';
 
 class TvAiringTodayBloc extends Bloc<TvAiringTodayEvent, TvAiringTodayState> {
   final Repository repository;
 
-  TvAiringTodayBloc({this.repository}) : super(InitialTvAiringToday());
-
-  @override
-  Stream<TvAiringTodayState> mapEventToState(TvAiringTodayEvent event) async* {
-    if (event is LoadTvAiringToday) {
-      yield* _mapLoadTvAiringTodayToState();
-    }
+  TvAiringTodayBloc({required this.repository})
+      : super(InitialTvAiringToday()) {
+    on<LoadTvAiringToday>(_loadTvAiringToday);
   }
 
-  Stream<TvAiringTodayState> _mapLoadTvAiringTodayToState() async* {
+  void _loadTvAiringToday(
+    LoadTvAiringToday event,
+    Emitter<TvAiringTodayState> emit,
+  ) async {
     try {
-      yield TvAiringTodayLoading();
+      emit(TvAiringTodayLoading());
       var movies = await repository.getTvAiringToday(
           ApiConstant.apiKey, ApiConstant.language);
-      if (movies.results.isEmpty) {
-        yield TvAiringTodayNoData(AppConstant.noData);
+      if (movies?.results.isEmpty ?? true) {
+        emit(TvAiringTodayNoData(AppConstant.noData));
       } else {
-        yield TvAiringTodayHasData(movies);
+        emit(TvAiringTodayHasData(movies!));
       }
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.CONNECT_TIMEOUT ||
-          e.type == DioErrorType.RECEIVE_TIMEOUT) {
-        yield TvAiringTodayNoInternetConnection();
-      } else if (e.type == DioErrorType.DEFAULT) {
-        yield TvAiringTodayNoInternetConnection();
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        emit(TvAiringTodayNoInternetConnection());
+      } else if (e.type == DioExceptionType.connectionError) {
+        emit(TvAiringTodayNoInternetConnection());
       } else {
-        yield TvAiringTodayError(e.toString());
+        emit(TvAiringTodayError(e.toString()));
       }
     }
   }

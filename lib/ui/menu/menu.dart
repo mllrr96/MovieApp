@@ -1,7 +1,7 @@
 import 'package:moviecatalogue/ui/setting/setting_screen.dart';
 
 class Menu {
-  const Menu({this.route, this.title});
+  const Menu({required this.route, required this.title});
 
   final String route;
   final String title;

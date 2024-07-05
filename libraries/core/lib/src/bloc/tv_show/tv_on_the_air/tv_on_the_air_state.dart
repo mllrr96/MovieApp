@@ -15,7 +15,7 @@ class TvOnTheAirLoading extends TvOnTheAirState {}
 class TvOnTheAirHasData extends TvOnTheAirState {
   final Result result;
 
-  const TvOnTheAirHasData([this.result]);
+  const TvOnTheAirHasData(this.result);
 
   @override
   List<Object> get props => [result];
@@ -35,7 +35,7 @@ class TvOnTheAirNoInternetConnection extends TvOnTheAirState {}
 class TvOnTheAirError extends TvOnTheAirState {
   final String errorMessage;
 
-  const TvOnTheAirError([this.errorMessage]);
+  const TvOnTheAirError(this.errorMessage);
 
   @override
   List<Object> get props => [errorMessage];

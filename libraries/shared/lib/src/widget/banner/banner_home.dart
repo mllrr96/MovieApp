@@ -5,21 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
 class BannerHome extends StatelessWidget {
-  final Function(int index, CarouselPageChangedReason reason) onPageChanged;
+  final void Function(int index, CarouselPageChangedReason reason)
+      onPageChanged;
   final Result data;
   final int currentIndex;
   final String routeNameDetail, routeNameAll;
   final bool isFromMovie;
-
-  const BannerHome(
-      {Key key,
-      this.onPageChanged,
-      this.data,
-      this.currentIndex,
-      this.routeNameDetail,
-      this.routeNameAll,
-      @required this.isFromMovie})
-      : super(key: key);
+  BannerHome({
+    required this.onPageChanged,
+    required this.data,
+    required this.currentIndex,
+    required this.routeNameDetail,
+    required this.routeNameAll,
+    required this.isFromMovie,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,8 @@ class BannerHome extends StatelessWidget {
                     child: GridTile(
                       // TODO: Create Hero Animation with "id" from "result"
                       child: CachedNetworkImage(
-                        imageUrl: data.results[i].backdropPath.imageOriginal,
+                        imageUrl:
+                            data.results[i].backdropPath?.imageOriginal ?? '',
                         width: Sizes.width(context),
                         fit: BoxFit.fill,
                         placeholder: (context, url) => LoadingIndicator(),
@@ -65,8 +66,8 @@ class BannerHome extends StatelessWidget {
                         padding: EdgeInsets.all(Sizes.dp5(context)),
                         child: Text(
                           isFromMovie
-                              ? data.results[i].title
-                              : data.results[i].tvName,
+                              ? data.results[i].title ?? ''
+                              : data.results[i].tvName ?? '',
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(

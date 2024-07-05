@@ -10,16 +10,16 @@ class CardMoviesHeader extends StatelessWidget {
   final String imagePoster;
   final double rating;
 
-  const CardMoviesHeader(
-      {Key key,
-      this.isFromBanner,
-      this.idMovie,
-      this.genre,
-      this.title,
-      this.imageBanner,
-      this.imagePoster,
-      this.rating})
-      : super(key: key);
+  CardMoviesHeader({
+    required this.isFromBanner,
+    required this.idMovie,
+    required this.genre,
+    required this.title,
+    required this.imageBanner,
+    required this.imagePoster,
+    required this.rating,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

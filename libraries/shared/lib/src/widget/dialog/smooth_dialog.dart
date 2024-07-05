@@ -7,7 +7,7 @@ enum SmoothMode { Lottie, Network, Asset }
 
 class ButtonConfig {
   final String dialogDone, dialogCancel;
-  Color buttonCancelColor, buttonDoneColor, labelCancelColor, labelDoneColor;
+  Color? buttonCancelColor, buttonDoneColor, labelCancelColor, labelDoneColor;
 
   ButtonConfig(
       {this.dialogDone = 'Done',
@@ -28,20 +28,19 @@ class SmoothDialog {
   final double dialogHeight;
   final double imageHeight;
   final double imageWidth;
-  final Function submit;
+  final void Function() submit;
   final BuildContext context;
 
-  ButtonConfig buttonConfig;
+  ButtonConfig? buttonConfig;
   SmoothMode mode = SmoothMode.Lottie;
 
   SmoothDialog({
-    Key key,
-    @required this.context,
-    @required this.path,
-    @required this.title,
-    @required this.content,
-    @required this.submit,
-    @required this.mode,
+    required this.context,
+    required this.path,
+    required this.title,
+    required this.content,
+    required this.submit,
+    required this.mode,
     this.buttonConfig,
     this.imageHeight = 150,
     this.imageWidth = 150,
@@ -139,17 +138,17 @@ class SmoothDialog {
                                             horizontal: Sizes.dp22(context)),
                                         decoration: BoxDecoration(
                                             color:
-                                                buttonConfig.buttonCancelColor,
+                                                buttonConfig?.buttonCancelColor,
                                             borderRadius: BorderRadius.circular(
                                                 Sizes.dp16(context))),
                                         child: Text(
-                                          "${buttonConfig.dialogCancel}",
+                                          "${buttonConfig?.dialogCancel}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: Sizes.dp13(context),
                                             fontWeight: FontWeight.bold,
                                             color:
-                                                buttonConfig.labelCancelColor,
+                                                buttonConfig?.labelCancelColor,
                                           ),
                                         ),
                                       ),
@@ -165,16 +164,17 @@ class SmoothDialog {
                                             vertical: Sizes.dp12(context),
                                             horizontal: Sizes.dp26(context)),
                                         decoration: BoxDecoration(
-                                            color: buttonConfig.buttonDoneColor,
+                                            color:
+                                                buttonConfig?.buttonDoneColor,
                                             borderRadius: BorderRadius.circular(
                                                 Sizes.dp16(context))),
                                         child: Text(
-                                          "${buttonConfig.dialogDone}",
+                                          "${buttonConfig?.dialogDone}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: Sizes.dp13(context),
                                             fontWeight: FontWeight.bold,
-                                            color: buttonConfig.labelDoneColor,
+                                            color: buttonConfig?.labelDoneColor,
                                           ),
                                         ),
                                       ),

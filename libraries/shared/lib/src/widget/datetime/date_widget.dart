@@ -7,15 +7,14 @@ class DateWidget extends StatefulWidget {
 }
 
 class _DateWidgetState extends State<DateWidget> with TickerProviderStateMixin {
-  var _dateSelectorAcList = List<AnimationController>();
-  var _dateSelectorTweenList = List<Animation<double>>();
+  final _dateSelectorAcList = <AnimationController>[];
+  final _dateSelectorTweenList = <Animation<double>>[];
 
-  AnimationController _dateBackgroundAc;
-  Animation<double> _dateBackgroundTween;
+  // late AnimationController _dateBackgroundAc;
+  // late Animation<double> _dateBackgroundTween;
 
   var _currentDate = DateTime.now();
   var _dateIndexSelected = 1;
-  bool _isDarkTheme;
 
   @override
   void initState() {
@@ -33,14 +32,14 @@ class _DateWidgetState extends State<DateWidget> with TickerProviderStateMixin {
     }
 
     // initialize dateSelector Background
-    _dateBackgroundAc =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 700));
-    _dateBackgroundTween = Tween<double>(begin: 1000, end: 0)
-        .chain(CurveTween(curve: Curves.easeOutCubic))
-        .animate(_dateBackgroundAc);
-    Future.delayed(Duration(milliseconds: 150), () {
-      _dateBackgroundAc.forward();
-    });
+    // _dateBackgroundAc =
+    //     AnimationController(vsync: this, duration: Duration(milliseconds: 700));
+    // _dateBackgroundTween = Tween<double>(begin: 1000, end: 0)
+    //     .chain(CurveTween(curve: Curves.easeOutCubic))
+    //     .animate(_dateBackgroundAc);
+    // Future.delayed(Duration(milliseconds: 150), () {
+    //   _dateBackgroundAc.forward();
+    // });
   }
 
   Color _textDateColor(int index) {
@@ -67,37 +66,37 @@ class _DateWidgetState extends State<DateWidget> with TickerProviderStateMixin {
     }
   }
 
+  bool get _isDarkTheme => Theme.of(context).brightness == Brightness.dark;
+
   @override
   void dispose() {
-    _dateBackgroundAc.dispose();
+    // _dateBackgroundAc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    _isDarkTheme = themeData.appBarTheme?.color == null;
     return Container(
       height: Sizes.width(context) / 3.5,
       child: Stack(
         alignment: Alignment.centerLeft,
         children: <Widget>[
-          AnimatedBuilder(
-            animation: _dateBackgroundAc,
-            builder: (ctx, child) {
-              return Transform.translate(
-                offset: Offset(_dateBackgroundTween.value, 0),
-                child: child,
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: _backgroundColor(),
-                borderRadius:
-                    BorderRadius.all(Radius.circular(Sizes.dp10(context))),
-              ),
-            ),
-          ),
+          // AnimatedBuilder(
+          //   animation: _dateBackgroundAc,
+          //   builder: (ctx, child) {
+          //     return Transform.translate(
+          //       offset: Offset(_dateBackgroundTween.value, 0),
+          //       child: child,
+          //     );
+          //   },
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //       color: _backgroundColor(),
+          //       borderRadius:
+          //           BorderRadius.all(Radius.circular(Sizes.dp10(context))),
+          //     ),
+          //   ),
+          // ),
           ListView.builder(
             physics: ClampingScrollPhysics(),
             itemCount: 7,

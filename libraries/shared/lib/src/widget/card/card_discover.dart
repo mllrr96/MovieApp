@@ -7,11 +7,16 @@ class CardDiscover extends StatelessWidget {
   final String image, title;
   final double rating;
   final List<int> genre;
-  final Function onTap;
+  final void Function() onTap;
 
-  const CardDiscover(
-      {Key key, this.image, this.title, this.rating, this.genre, this.onTap})
-      : super(key: key);
+  CardDiscover({
+    required this.image,
+    required this.title,
+    required this.rating,
+    required this.genre,
+    required this.onTap,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +79,7 @@ class CardDiscover extends StatelessWidget {
       margin: EdgeInsets.only(right: 10),
       padding: EdgeInsets.all(8),
       child: Text(
-        Genres.genres[id],
+        Genres.genres[id] ?? '',
         style: TextStyle(fontSize: 12, color: ColorPalettes.white),
       ),
       decoration: BoxDecoration(

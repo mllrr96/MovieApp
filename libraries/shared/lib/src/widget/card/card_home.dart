@@ -4,16 +4,21 @@ import 'package:shared/shared.dart';
 
 class CardHome extends StatelessWidget {
   final String image, title;
-  final Function onTap;
+  final void Function() onTap;
   final double rating;
 
-  const CardHome({Key key, this.image, this.title, this.onTap, this.rating})
-      : super(key: key);
+  CardHome({
+    required this.image,
+    required this.title,
+    required this.onTap,
+    required this.rating,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var isDarkTheme = theme.appBarTheme?.color == null;
+    var isDarkTheme = theme.brightness == Brightness.dark;
     return Container(
       width: Sizes.width(context) / 2.5,
       child: GestureDetector(

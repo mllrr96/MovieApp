@@ -1,15 +1,13 @@
 import 'package:core/core.dart';
-import 'package:flutter/cupertino.dart';
 
 class MovieRepository implements Repository {
   final ApiRepository apiRepository;
   final LocalRepository localRepository;
 
-  MovieRepository(
-      {@required this.apiRepository, @required this.localRepository});
+  MovieRepository({required this.apiRepository, required this.localRepository});
 
   @override
-  Future<Result> getMovieNowPlaying(
+  Future<Result?> getMovieNowPlaying(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
@@ -22,13 +20,16 @@ class MovieRepository implements Repository {
       }
     } catch (_) {
       final data = await apiRepository.getMovieNowPlaying(apiKey, language);
+      if (data == null) {
+        return null;
+      }
       localRepository.saveMovieNowPlaying(data);
       return data;
     }
   }
 
   @override
-  Future<Result> getMovieUpComing(
+  Future<Result?> getMovieUpComing(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
@@ -40,13 +41,16 @@ class MovieRepository implements Repository {
       }
     } catch (_) {
       final data = await apiRepository.getMovieUpComing(apiKey, language);
+      if (data == null) {
+        return null;
+      }
       localRepository.saveMovieUpComing(data);
       return data;
     }
   }
 
   @override
-  Future<Result> getMoviePopular(
+  Future<Result?> getMoviePopular(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
@@ -58,13 +62,16 @@ class MovieRepository implements Repository {
       }
     } catch (_) {
       final data = await apiRepository.getMoviePopular(apiKey, language);
+      if (data == null) {
+        return null;
+      }
       localRepository.saveMoviePopular(data);
       return data;
     }
   }
 
   @override
-  Future<Result> getTvAiringToday(
+  Future<Result?> getTvAiringToday(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
@@ -76,13 +83,16 @@ class MovieRepository implements Repository {
       }
     } catch (_) {
       final data = await apiRepository.getTvAiringToday(apiKey, language);
+      if (data == null) {
+        return null;
+      }
       localRepository.saveTvAiringToday(data);
       return data;
     }
   }
 
   @override
-  Future<Result> getTvPopular(
+  Future<Result?> getTvPopular(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
@@ -94,13 +104,16 @@ class MovieRepository implements Repository {
       }
     } catch (_) {
       final data = await apiRepository.getTvPopular(apiKey, language);
+      if (data == null) {
+        return null;
+      }
       localRepository.saveTvPopular(data);
       return data;
     }
   }
 
   @override
-  Future<Result> getTvOnTheAir(
+  Future<Result?> getTvOnTheAir(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
@@ -112,14 +125,17 @@ class MovieRepository implements Repository {
       }
     } catch (_) {
       final data = await apiRepository.getTvOnTheAir(apiKey, language);
+      if (data == null) {
+        return null;
+      }
       localRepository.saveTvOnTheAir(data);
       return data;
     }
   }
 
   @override
-  Future<ResultCrew> getMovieCrew(
-      [int movieId,
+  Future<ResultCrew?> getMovieCrew(
+      [int movieId = 0,
       String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     final data = await apiRepository.getMovieCrew(movieId, apiKey, language);
@@ -127,7 +143,7 @@ class MovieRepository implements Repository {
   }
 
   @override
-  Future<ResultTrailer> getMovieTrailer(int movieId,
+  Future<ResultTrailer?> getMovieTrailer(int movieId,
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     final data = await apiRepository.getMovieTrailer(movieId, apiKey, language);
@@ -135,8 +151,8 @@ class MovieRepository implements Repository {
   }
 
   @override
-  Future<ResultCrew> getTvShowCrew(
-      [int tvId,
+  Future<ResultCrew?> getTvShowCrew(
+      [int tvId = 0,
       String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     final data = await apiRepository.getTvShowCrew(tvId, apiKey, language);
@@ -144,7 +160,7 @@ class MovieRepository implements Repository {
   }
 
   @override
-  Future<ResultTrailer> getTvShowTrailer(int tvId,
+  Future<ResultTrailer?> getTvShowTrailer(int tvId,
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     final data = await apiRepository.getTvShowTrailer(tvId, apiKey, language);
@@ -152,7 +168,7 @@ class MovieRepository implements Repository {
   }
 
   @override
-  Future<Result> getDiscoverMovie(
+  Future<Result?> getDiscoverMovie(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
@@ -164,6 +180,9 @@ class MovieRepository implements Repository {
       }
     } catch (_) {
       final data = await apiRepository.getDiscoverMovie(apiKey, language);
+      if (data == null) {
+        return null;
+      }
       localRepository.saveDiscoverMovie(data);
       return data;
     }

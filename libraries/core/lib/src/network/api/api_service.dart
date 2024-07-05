@@ -1,19 +1,18 @@
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 
 class ApiService {
   final Dio dio;
 
-  ApiService({@required this.dio});
+  ApiService({required this.dio});
 
-  Future<Result> getMovieNowPlaying(String apiKey, String language) async {
+  Future<Result?> getMovieNowPlaying(String apiKey, String language) async {
     try {
       final response = await dio.get("movie/now_playing",
           queryParameters: {"api_key": apiKey, "language": language});
       return Result.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -22,8 +21,8 @@ class ApiService {
       final response = await dio.get("movie/upcoming",
           queryParameters: {"api_key": apiKey, "language": language});
       return Result.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -32,8 +31,8 @@ class ApiService {
       final response = await dio.get("movie/popular",
           queryParameters: {"api_key": apiKey, "language": language});
       return Result.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -42,8 +41,8 @@ class ApiService {
       final response = await dio.get("discover/movie",
           queryParameters: {"api_key": apiKey, "language": language});
       return Result.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -52,8 +51,8 @@ class ApiService {
       final response = await dio.get("tv/airing_today",
           queryParameters: {"api_key": apiKey, "language": language});
       return Result.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -62,8 +61,8 @@ class ApiService {
       final response = await dio.get("tv/popular",
           queryParameters: {"api_key": apiKey, "language": language});
       return Result.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -72,8 +71,8 @@ class ApiService {
       final response = await dio.get("tv/on_the_air",
           queryParameters: {"api_key": apiKey, "language": language});
       return Result.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -83,8 +82,8 @@ class ApiService {
       final response = await dio
           .get("movie/$movieId/credits?api_key=$apiKey&language=$language");
       return ResultCrew.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -94,8 +93,8 @@ class ApiService {
       final response = await dio
           .get("movie/$movieId/videos?api_key=$apiKey&language=$language");
       return ResultTrailer.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -105,8 +104,8 @@ class ApiService {
       final response =
           await dio.get("tv/$tvId/credits?api_key=$apiKey&language=$language");
       return ResultCrew.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 
@@ -116,8 +115,8 @@ class ApiService {
       final response =
           await dio.get("tv/$tvId/videos?api_key=$apiKey&language=$language");
       return ResultTrailer.fromJson(response.data);
-    } on DioError catch (e) {
-      return e.error;
+    } on DioException catch (e) {
+      throw Exception(e.error);
     }
   }
 }

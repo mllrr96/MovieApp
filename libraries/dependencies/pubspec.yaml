@@ -5,7 +5,7 @@ author:
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.17.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -13,24 +13,24 @@ dependencies:
     sdk: flutter
 
   # UI
-  shimmer: ^1.1.2
-  cached_network_image: ^2.4.1
-  url_launcher: ^5.7.10
-  flutter_launcher_icons: ^0.8.0
-  package_info: ^0.4.3+2
-  youtube_player_flutter: ^7.0.0+7
-  flutter_svg: 0.19.0
-  liquid_pull_to_refresh: ^2.0.0
-  carousel_slider: ^2.3.1
-  lottie: ^0.7.0+1
-  fluttertoast: ^7.1.5
+  shimmer: ^3.0.0
+  cached_network_image: ^3.3.1
+  url_launcher: ^6.3.0
+  flutter_launcher_icons: ^0.13.1
+  package_info: ^2.0.2
+  youtube_player_flutter: ^9.0.1
+  flutter_svg: ^2.0.10+1
+  liquid_pull_to_refresh: ^3.0.1
+  carousel_slider: ^4.2.1
+  lottie: ^3.1.2
+  fluttertoast: ^8.2.6
 
   # Core
-  flutter_bloc: ^6.1.1
-  shared_preferences: ^0.5.12+4
-  equatable: ^1.2.5
-  get_it: ^5.0.3
-  dio: ^3.0.10
+  flutter_bloc: ^8.1.6
+  shared_preferences: ^2.2.3
+  equatable: ^2.0.5
+  get_it: ^7.7.0
+  dio: ^5.5.0+1
 
 dev_dependencies:
   flutter_test:

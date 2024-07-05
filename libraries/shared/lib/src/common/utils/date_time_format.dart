@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 class DateTimeFormat {
   static String day(int dayWeek) {
     switch (dayWeek) {

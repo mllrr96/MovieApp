@@ -8,16 +8,20 @@ class CardTrailer extends StatefulWidget {
   final VoidCallback onExitFullScreen;
   final int length;
 
-  const CardTrailer(
-      {Key key, this.title, this.youtube, this.onExitFullScreen, this.length})
-      : super(key: key);
+  CardTrailer({
+    required this.title,
+    required this.youtube,
+    required this.onExitFullScreen,
+    required this.length,
+    super.key,
+  });
 
   @override
   _CardTrailerState createState() => _CardTrailerState();
 }
 
 class _CardTrailerState extends State<CardTrailer> with WidgetsBindingObserver {
-  YoutubePlayerController _controller;
+  late YoutubePlayerController _controller;
 
   @override
   void initState() {
@@ -51,8 +55,9 @@ class _CardTrailerState extends State<CardTrailer> with WidgetsBindingObserver {
 
   @override
   void didChangeMetrics() {
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-    if (widget.onExitFullScreen != null) widget.onExitFullScreen();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
+    // if (widget.onExitFullScreen != null) widget.onExitFullScreen();
     super.didChangeMetrics();
   }
 

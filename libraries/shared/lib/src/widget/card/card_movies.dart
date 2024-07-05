@@ -9,18 +9,18 @@ class CardMovies extends StatelessWidget {
   final String releaseDate;
   final List<Widget> genre;
   final String overview;
-  final Function onTap;
+  final void Function() onTap;
 
-  const CardMovies(
-      {Key key,
-      this.image,
-      this.vote,
-      this.title,
-      this.releaseDate,
-      this.genre,
-      this.overview,
-      this.onTap})
-      : super(key: key);
+  CardMovies({
+    required this.image,
+    required this.vote,
+    required this.title,
+    required this.releaseDate,
+    required this.genre,
+    required this.overview,
+    required this.onTap,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

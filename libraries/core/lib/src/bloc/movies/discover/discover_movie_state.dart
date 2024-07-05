@@ -15,7 +15,7 @@ class DiscoverMovieLoading extends DiscoverMovieState {}
 class DiscoverMovieHasData extends DiscoverMovieState {
   final Result result;
 
-  const DiscoverMovieHasData([this.result]);
+  const DiscoverMovieHasData(this.result);
 
   @override
   List<Object> get props => [result];

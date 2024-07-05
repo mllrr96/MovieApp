@@ -7,33 +7,31 @@ export 'package:flutter_bloc/flutter_bloc.dart';
 class TvOnTheAirBloc extends Bloc<TvOnTheAirEvent, TvOnTheAirState> {
   final Repository repository;
 
-  TvOnTheAirBloc({this.repository}) : super(InitialTvOnTheAir());
-
-  @override
-  Stream<TvOnTheAirState> mapEventToState(TvOnTheAirEvent event) async* {
-    if (event is LoadTvOnTheAir) {
-      yield* _mapLoadTvOnTheAirToState();
-    }
+  TvOnTheAirBloc({required this.repository}) : super(InitialTvOnTheAir()) {
+    on<LoadTvOnTheAir>(_loadTvOnTheAir);
   }
 
-  Stream<TvOnTheAirState> _mapLoadTvOnTheAirToState() async* {
+  _loadTvOnTheAir(
+    LoadTvOnTheAir event,
+    Emitter<TvOnTheAirState> emit,
+  ) async {
     try {
-      yield TvOnTheAirLoading();
+      emit(TvOnTheAirLoading());
       var movies = await repository.getTvOnTheAir(
           ApiConstant.apiKey, ApiConstant.language);
-      if (movies.results.isEmpty) {
-        yield TvOnTheAirNoData(AppConstant.noData);
+      if (movies?.results.isEmpty ?? true) {
+        emit(TvOnTheAirNoData(AppConstant.noData));
       } else {
-        yield TvOnTheAirHasData(movies);
+        emit(TvOnTheAirHasData(movies!));
       }
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.CONNECT_TIMEOUT ||
-          e.type == DioErrorType.RECEIVE_TIMEOUT) {
-        yield TvOnTheAirNoInternetConnection();
-      } else if (e.type == DioErrorType.DEFAULT) {
-        yield TvOnTheAirNoInternetConnection();
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        emit(TvOnTheAirNoInternetConnection());
+      } else if (e.type == DioExceptionType.connectionError) {
+        emit(TvOnTheAirNoInternetConnection());
       } else {
-        yield TvOnTheAirError(e.toString());
+        emit(TvOnTheAirError(e.toString()));
       }
     }
   }

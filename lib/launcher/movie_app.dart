@@ -1,6 +1,5 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviecatalogue/ui/booking/booking_screen.dart';
 import 'package:moviecatalogue/ui/dashboard/dashboard_screen.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
@@ -79,7 +78,8 @@ class MyApp extends StatelessWidget {
         OnTheAirScreen.routeName: (context) => OnTheAirScreen(),
         TvPopularScreen.routeName: (context) => TvPopularScreen(),
         DetailScreen.routeName: (context) => DetailScreen(
-              arguments: ModalRoute.of(context).settings.arguments,
+              arguments:
+                  ModalRoute.of(context)?.settings.arguments as ScreenArguments,
             ),
         SettingScreen.routeName: (context) => SettingScreen(),
         AboutScreen.routeName: (context) => AboutScreen(),

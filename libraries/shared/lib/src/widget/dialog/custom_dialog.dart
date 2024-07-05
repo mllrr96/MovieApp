@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
 class CustomDialog extends StatelessWidget {
-  final bool isDark, groupValue;
-  final ValueChanged<bool> onChanged;
+  final bool groupValue;
+  final void Function(bool?)? onChanged;
 
-  const CustomDialog({Key key, this.isDark, this.groupValue, this.onChanged})
-      : super(key: key);
+  CustomDialog({
+    required this.groupValue,
+    this.onChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

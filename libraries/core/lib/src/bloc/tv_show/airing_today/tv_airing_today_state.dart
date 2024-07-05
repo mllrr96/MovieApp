@@ -15,7 +15,7 @@ class TvAiringTodayLoading extends TvAiringTodayState {}
 class TvAiringTodayHasData extends TvAiringTodayState {
   final Result result;
 
-  const TvAiringTodayHasData([this.result]);
+  const TvAiringTodayHasData(this.result);
 
   @override
   List<Object> get props => [result];

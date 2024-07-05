@@ -3,10 +3,13 @@ import 'package:shared/shared.dart';
 
 class NoInternetWidget extends StatelessWidget {
   final String message;
-  final Function onPressed;
+  final void Function() onPressed;
 
-  const NoInternetWidget({Key key, this.message, this.onPressed})
-      : super(key: key);
+  NoInternetWidget({
+    required this.message,
+    required this.onPressed,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +25,10 @@ class NoInternetWidget extends StatelessWidget {
           ),
         ),
         SizedBox(height: Sizes.dp10(context)),
-        RaisedButton.icon(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Sizes.dp10(context)),
-          ),
+        ElevatedButton.icon(
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(Sizes.dp10(context)),
+          // ),
           icon: Icon(Icons.wifi),
           onPressed: onPressed,
           label: Text('Reload'),

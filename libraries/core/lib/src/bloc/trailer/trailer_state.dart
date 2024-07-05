@@ -15,7 +15,7 @@ class TrailerLoading extends TrailerState {}
 class TrailerHasData extends TrailerState {
   final ResultTrailer trailer;
 
-  const TrailerHasData([this.trailer]);
+  const TrailerHasData(this.trailer);
 
   @override
   List<Object> get props => [trailer];

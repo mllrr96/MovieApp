@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 abstract class ThemeEvent extends Equatable {
   const ThemeEvent();
@@ -11,7 +10,7 @@ abstract class ThemeEvent extends Equatable {
 class ThemeChanged extends ThemeEvent {
   final bool isDarkTheme;
 
-  ThemeChanged({@required this.isDarkTheme});
+  ThemeChanged({required this.isDarkTheme});
 
   @override
   List<Object> get props => [isDarkTheme];
