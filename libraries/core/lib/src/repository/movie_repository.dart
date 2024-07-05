@@ -2,29 +2,22 @@ import 'package:core/core.dart';
 
 class MovieRepository implements Repository {
   final ApiRepository apiRepository;
-  final LocalRepository localRepository;
+  // final LocalRepository localRepository;
 
-  MovieRepository({required this.apiRepository, required this.localRepository});
+  MovieRepository({required this.apiRepository});
 
   @override
   Future<Result?> getMovieNowPlaying(
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
-      var fromLocal =
-          await localRepository.getMovieNowPlaying(apiKey, language);
-      if (fromLocal != null) {
-        return fromLocal;
-      } else {
-        throw Exception();
-      }
-    } catch (_) {
       final data = await apiRepository.getMovieNowPlaying(apiKey, language);
       if (data == null) {
         return null;
       }
-      localRepository.saveMovieNowPlaying(data);
       return data;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -33,19 +26,13 @@ class MovieRepository implements Repository {
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
-      var fromLocal = await localRepository.getMovieUpComing(apiKey, language);
-      if (fromLocal != null) {
-        return fromLocal;
-      } else {
-        throw Exception();
-      }
-    } catch (_) {
       final data = await apiRepository.getMovieUpComing(apiKey, language);
       if (data == null) {
         return null;
       }
-      localRepository.saveMovieUpComing(data);
       return data;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -54,19 +41,13 @@ class MovieRepository implements Repository {
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
-      var fromLocal = await localRepository.getMoviePopular(apiKey, language);
-      if (fromLocal != null) {
-        return fromLocal;
-      } else {
-        throw Exception();
-      }
-    } catch (_) {
       final data = await apiRepository.getMoviePopular(apiKey, language);
       if (data == null) {
         return null;
       }
-      localRepository.saveMoviePopular(data);
       return data;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -75,19 +56,13 @@ class MovieRepository implements Repository {
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
-      var fromLocal = await localRepository.getTvAiringToday(apiKey, language);
-      if (fromLocal != null) {
-        return fromLocal;
-      } else {
-        throw Exception();
-      }
-    } catch (_) {
       final data = await apiRepository.getTvAiringToday(apiKey, language);
       if (data == null) {
         return null;
       }
-      localRepository.saveTvAiringToday(data);
       return data;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -96,19 +71,13 @@ class MovieRepository implements Repository {
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
-      var fromLocal = await localRepository.getTvPopular(apiKey, language);
-      if (fromLocal != null) {
-        return fromLocal;
-      } else {
-        throw Exception();
-      }
-    } catch (_) {
       final data = await apiRepository.getTvPopular(apiKey, language);
       if (data == null) {
         return null;
       }
-      localRepository.saveTvPopular(data);
       return data;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -117,19 +86,13 @@ class MovieRepository implements Repository {
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
-      var fromLocal = await localRepository.getTvOnTheAir(apiKey, language);
-      if (fromLocal != null) {
-        return fromLocal;
-      } else {
-        throw Exception();
-      }
-    } catch (_) {
       final data = await apiRepository.getTvOnTheAir(apiKey, language);
       if (data == null) {
         return null;
       }
-      localRepository.saveTvOnTheAir(data);
       return data;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -172,19 +135,13 @@ class MovieRepository implements Repository {
       [String apiKey = ApiConstant.apiKey,
       String language = ApiConstant.language]) async {
     try {
-      var fromLocal = await localRepository.getDiscoverMovie(apiKey, language);
-      if (fromLocal != null) {
-        return fromLocal;
-      } else {
-        throw Exception();
-      }
-    } catch (_) {
       final data = await apiRepository.getDiscoverMovie(apiKey, language);
       if (data == null) {
         return null;
       }
-      localRepository.saveDiscoverMovie(data);
       return data;
+    } catch (_) {
+      return null;
     }
   }
 }

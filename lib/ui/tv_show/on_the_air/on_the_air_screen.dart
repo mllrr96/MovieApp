@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
 import 'package:shared/shared.dart';
 
@@ -14,23 +12,21 @@ class OnTheAirScreen extends StatefulWidget {
 }
 
 class _OnTheAirScreenState extends State<OnTheAirScreen> {
-  late Completer<void> _refreshCompleter;
-
   _loadTvOnAir(BuildContext context) {
     context.read<TvOnTheAirBloc>().add(LoadTvOnTheAir());
   }
 
-  Future<void> _refresh() {
+  void _refresh() {
     _loadTvOnAir(context);
-    return _refreshCompleter.future;
   }
 
   @override
   void initState() {
     super.initState();
-    _refreshCompleter = Completer<void>();
     _loadTvOnAir(context);
   }
+
+  final RefreshController _refreshController = RefreshController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +35,20 @@ class _OnTheAirScreenState extends State<OnTheAirScreen> {
         title: Text('On The Air'),
         centerTitle: true,
       ),
-      body: LiquidPullToRefresh(
+      body: SmartRefresher(
         onRefresh: _refresh,
-        showChildOpacityTransition: false,
-        child: BlocBuilder<TvOnTheAirBloc, TvOnTheAirState>(
+        controller: _refreshController,
+        child: BlocConsumer<TvOnTheAirBloc, TvOnTheAirState>(
+          listener: (context, state) {
+            if (state is TvOnTheAirHasData) {
+              _refreshController.refreshCompleted();
+            } else if (state is TvOnTheAirError ||
+                state is TvOnTheAirNoInternetConnection) {
+              _refreshController.refreshFailed();
+            }
+          },
           builder: (context, state) {
             if (state is TvOnTheAirHasData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return ListView.builder(
                 itemCount: state.result.results.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -73,16 +75,10 @@ class _OnTheAirScreenState extends State<OnTheAirScreen> {
             } else if (state is TvOnTheAirLoading) {
               return ShimmerList();
             } else if (state is TvOnTheAirError) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.errorMessage);
             } else if (state is TvOnTheAirNoData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.message);
             } else if (state is TvOnTheAirNoInternetConnection) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return NoInternetWidget(
                 message: AppConstant.noInternetConnection,
                 onPressed: () => _loadTvOnAir(context),

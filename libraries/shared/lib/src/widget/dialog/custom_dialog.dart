@@ -16,36 +16,27 @@ class CustomDialog extends StatelessWidget {
     return SimpleDialog(
       title: Text("Switch Theme"),
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: Sizes.dp10(context)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Radio(
-                value: true,
-                groupValue: groupValue,
-                onChanged: onChanged,
-              ),
-              Text('Dark'),
-            ],
-          ),
+        RadioListTile(
+          value: true,
+          groupValue: groupValue,
+          onChanged: onChanged,
+          title: Text('Dark'),
         ),
         SizedBox(
           height: Sizes.dp10(context),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: Sizes.dp10(context)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Radio(
-                value: false,
-                groupValue: groupValue,
-                onChanged: onChanged,
-              ),
-              Text('Light'),
-            ],
-          ),
+        RadioListTile(
+          value: false,
+          groupValue: groupValue,
+          onChanged: onChanged,
+          title: Text('Light'),
+        ),
+        SizedBox(
+          height: Sizes.dp10(context),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Close'),
         ),
       ],
     );

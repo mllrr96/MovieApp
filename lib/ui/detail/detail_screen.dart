@@ -157,7 +157,11 @@ class _DetailScreenState extends State<DetailScreen> {
           height: Sizes.width(context) / 1.7,
           child: BlocBuilder<TrailerBloc, TrailerState>(
             builder: (context, state) {
+              print(state.runtimeType);
               if (state is TrailerHasData) {
+                state.trailer.trailer.forEach((t) {
+                  print(t.youtubeId);
+                });
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),

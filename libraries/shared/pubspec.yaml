@@ -1,7 +1,6 @@
 name: shared
 description: A new Flutter package.
 version: 0.0.1
-author:
 homepage:
 
 environment:
@@ -14,7 +13,7 @@ dependencies:
   # This is our modular
   core:
     path: ../core
-  dependencies:
+  mdependencies:
     path: ../dependencies
 
 dev_dependencies:

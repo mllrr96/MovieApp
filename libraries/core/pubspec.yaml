@@ -1,7 +1,6 @@
 name: core
 description: A new Flutter package.
 version: 0.0.1
-author:
 homepage:
 
 environment:
@@ -14,7 +13,7 @@ dependencies:
   json_serializable: ^6.8.0
 
   # This is our modular
-  dependencies:
+  mdependencies:
     path: ../dependencies
   shared:
     path: ../shared

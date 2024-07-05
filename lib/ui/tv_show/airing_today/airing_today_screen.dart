@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
 import 'package:shared/shared.dart';
 
@@ -14,23 +13,21 @@ class AiringTodayScreen extends StatefulWidget {
 }
 
 class _AiringTodayScreenState extends State<AiringTodayScreen> {
-  late Completer<void> _refreshCompleter;
-
   _loadTvAiring(BuildContext context) {
     context.read<TvAiringTodayBloc>().add(LoadTvAiringToday());
   }
 
-  Future<void> _refresh() {
+  void _refresh() {
     _loadTvAiring(context);
-    return _refreshCompleter.future;
   }
 
   @override
   void initState() {
     super.initState();
-    _refreshCompleter = Completer<void>();
     _loadTvAiring(context);
   }
+
+  final RefreshController _refreshController = RefreshController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +36,20 @@ class _AiringTodayScreenState extends State<AiringTodayScreen> {
         title: Text('Airing Today'),
         centerTitle: true,
       ),
-      body: LiquidPullToRefresh(
+      body: SmartRefresher(
         onRefresh: _refresh,
-        showChildOpacityTransition: false,
-        child: BlocBuilder<TvAiringTodayBloc, TvAiringTodayState>(
+        controller: _refreshController,
+        child: BlocConsumer<TvAiringTodayBloc, TvAiringTodayState>(
+          listener: (context, state) {
+            if (state is TvAiringTodayHasData) {
+              _refreshController.refreshCompleted();
+            } else if (state is TvAiringTodayError ||
+                state is TvAiringTodayNoInternetConnection) {
+              _refreshController.refreshFailed();
+            }
+          },
           builder: (context, state) {
             if (state is TvAiringTodayHasData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return ListView.builder(
                 itemCount: state.result.results.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -73,16 +76,10 @@ class _AiringTodayScreenState extends State<AiringTodayScreen> {
             } else if (state is TvAiringTodayLoading) {
               return ShimmerList();
             } else if (state is TvAiringTodayError) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.errorMessage);
             } else if (state is TvAiringTodayNoData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.message);
             } else if (state is TvAiringTodayNoInternetConnection) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return NoInternetWidget(
                 message: AppConstant.noInternetConnection,
                 onPressed: () => _loadTvAiring(context),

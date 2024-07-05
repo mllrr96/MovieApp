@@ -19,77 +19,78 @@ class SettingScreen extends StatelessWidget {
         title: Text('Settings'),
         centerTitle: true,
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: Sizes.dp30(context),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '© 2024 Movie Catalogue',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              FutureBuilder<String>(
+                future: _getVersion(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  var verInfo = "";
+                  if (snapshot.hasData) {
+                    verInfo = "v ${snapshot.data}";
+                  }
+                  return Container(
+                    child: Text(
+                      verInfo,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.all(Sizes.dp10(context)),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('Developer'),
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    size: Sizes.dp16(context),
-                  ),
-                  onPressed: () {
-                    Navigation.intent(context, AboutScreen.routeName);
-                  },
-                ),
-              ],
+            ListTile(
+              title: Text('Deleveloper'),
+              onTap: () => Navigation.intent(context, AboutScreen.routeName),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: Sizes.dp16(context),
+              ),
             ),
-            Divider(),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('Theme'),
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    size: Sizes.dp16(context),
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return BlocBuilder<ThemeBloc, ThemeState>(
-                          builder: (context, state) {
-                            return CustomDialog(
-                              groupValue: state.isDarkTheme,
-                              onChanged: (value) {
-                                if (value == null) return;
-                                context
-                                    .read<ThemeBloc>()
-                                    .add(ThemeChanged(isDarkTheme: value));
-                              },
-                            );
+            Divider(height: 0),
+            ListTile(
+              title: Text('Theme'),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: Sizes.dp16(context),
+              ),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return BlocBuilder<ThemeBloc, ThemeState>(
+                      builder: (context, state) {
+                        return CustomDialog(
+                          groupValue: state.isDarkTheme,
+                          onChanged: (value) {
+                            if (value == null) return;
+                            context
+                                .read<ThemeBloc>()
+                                .add(ThemeChanged(isDarkTheme: value));
+                            Navigator.pop(context);
                           },
                         );
                       },
                     );
                   },
-                ),
-              ],
-            ),
-            Divider(),
-            Spacer(),
-            FutureBuilder<String>(
-              future: _getVersion(),
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                var verInfo = "";
-                if (snapshot.hasData) {
-                  verInfo = "v ${snapshot.data}";
-                }
-                return Container(
-                  margin: EdgeInsets.only(bottom: Sizes.dp30(context)),
-                  child: Text(
-                    verInfo,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
                 );
               },
             ),

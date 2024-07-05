@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
 import 'package:shared/shared.dart';
 
@@ -14,23 +12,13 @@ class UpComingScreen extends StatefulWidget {
 }
 
 class _UpComingScreenState extends State<UpComingScreen> {
-  late Completer<void> _refreshCompleter;
-
-  _loadMovieUpComing(BuildContext context) {
-    context.read<MovieUpComingBloc>().add(LoadMovieUpComing());
-  }
-
-  Future<void> _refresh() {
-    _loadMovieUpComing(context);
-    return _refreshCompleter.future;
-  }
-
   @override
   void initState() {
     super.initState();
-    _refreshCompleter = Completer<void>();
-    _loadMovieUpComing(context);
+    context.read<MovieUpComingBloc>().add(LoadMovieUpComing());
   }
+
+  final RefreshController _refreshController = RefreshController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +27,22 @@ class _UpComingScreenState extends State<UpComingScreen> {
         title: Text('Up Coming Movie'),
         centerTitle: true,
       ),
-      body: LiquidPullToRefresh(
-        onRefresh: _refresh,
-        showChildOpacityTransition: false,
-        child: BlocBuilder<MovieUpComingBloc, MovieUpComingState>(
+      body: SmartRefresher(
+        onRefresh: () async {
+          context.read<MovieUpComingBloc>().add(LoadMovieUpComing());
+        },
+        controller: _refreshController,
+        child: BlocConsumer<MovieUpComingBloc, MovieUpComingState>(
+          listener: (context, state) {
+            if (state is MovieUpComingHasData) {
+              _refreshController.refreshCompleted();
+            } else if (state is MovieUpComingError ||
+                state is MovieUpComingNoInternetConnection) {
+              _refreshController.refreshFailed();
+            }
+          },
           builder: (context, state) {
             if (state is MovieUpComingHasData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return ListView.builder(
                 itemCount: state.result.results.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -73,19 +69,15 @@ class _UpComingScreenState extends State<UpComingScreen> {
             } else if (state is MovieUpComingLoading) {
               return ShimmerList();
             } else if (state is MovieUpComingError) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.errorMessage);
             } else if (state is MovieUpComingNoData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.message);
             } else if (state is MovieUpComingNoInternetConnection) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return NoInternetWidget(
                 message: AppConstant.noInternetConnection,
-                onPressed: () => _loadMovieUpComing(context),
+                onPressed: () {
+                  context.read<MovieUpComingBloc>().add(LoadMovieUpComing());
+                },
               );
             } else {
               return Center(child: Text(""));

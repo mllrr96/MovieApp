@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
 import 'package:shared/shared.dart';
 
@@ -14,23 +12,13 @@ class MoviePopularScreen extends StatefulWidget {
 }
 
 class _MoviePopularScreenState extends State<MoviePopularScreen> {
-  late Completer<void> _refreshCompleter;
-
-  _loadMoviePopular(BuildContext context) {
-    context.read<MoviePopularBloc>().add(LoadMoviePopular());
-  }
-
   @override
   void initState() {
     super.initState();
-    _refreshCompleter = Completer<void>();
-    _loadMoviePopular(context);
+    context.read<MoviePopularBloc>().add(LoadMoviePopular());
   }
 
-  Future<void> _refresh() {
-    _loadMoviePopular(context);
-    return _refreshCompleter.future;
-  }
+  final RefreshController _refreshController = RefreshController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +27,22 @@ class _MoviePopularScreenState extends State<MoviePopularScreen> {
         title: Text('Popular Movies'),
         centerTitle: true,
       ),
-      body: LiquidPullToRefresh(
-        onRefresh: _refresh,
-        showChildOpacityTransition: false,
-        child: BlocBuilder<MoviePopularBloc, MoviePopularState>(
+      body: SmartRefresher(
+        onRefresh: () async {
+          context.read<MoviePopularBloc>().add(LoadMoviePopular());
+        },
+        controller: _refreshController,
+        child: BlocConsumer<MoviePopularBloc, MoviePopularState>(
+          listener: (context, state) {
+            if (state is MoviePopularHasData) {
+              _refreshController.refreshCompleted();
+            } else if (state is MoviePopularError ||
+                state is MoviePopularNoInternetConnection) {
+              _refreshController.refreshFailed();
+            }
+          },
           builder: (context, state) {
             if (state is MoviePopularHasData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return ListView.builder(
                 itemCount: state.result.results.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -73,19 +69,14 @@ class _MoviePopularScreenState extends State<MoviePopularScreen> {
             } else if (state is MoviePopularLoading) {
               return ShimmerList();
             } else if (state is MoviePopularError) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.errorMessage);
             } else if (state is MoviePopularNoData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.message);
             } else if (state is MoviePopularNoInternetConnection) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return NoInternetWidget(
                 message: AppConstant.noInternetConnection,
-                onPressed: () => _loadMoviePopular(context),
+                onPressed: () =>
+                    context.read<MoviePopularBloc>().add(LoadMoviePopular()),
               );
             } else {
               return Center(child: Text(""));

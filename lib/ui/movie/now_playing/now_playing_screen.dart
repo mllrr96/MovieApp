@@ -1,8 +1,6 @@
-import 'dart:async';
-
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
 import 'package:shared/shared.dart';
 
@@ -14,21 +12,18 @@ class NowPlayingScreen extends StatefulWidget {
 }
 
 class _NowPlayingScreenState extends State<NowPlayingScreen> {
-  late Completer<void> _refreshCompleter;
-
+  final RefreshController _refreshController = RefreshController();
   _loadMovieNowPlaying(BuildContext context) {
     context.read<MovieNowPlayingBloc>().add(LoadMovieNowPlaying());
   }
 
-  Future<void> _refresh() {
+  void _refresh() {
     _loadMovieNowPlaying(context);
-    return _refreshCompleter.future;
   }
 
   @override
   void initState() {
     super.initState();
-    _refreshCompleter = Completer<void>();
     _loadMovieNowPlaying(context);
   }
 
@@ -39,14 +34,20 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
         title: Text('Now Playing Movies'),
         centerTitle: true,
       ),
-      body: LiquidPullToRefresh(
+      body: SmartRefresher(
         onRefresh: _refresh,
-        showChildOpacityTransition: false,
-        child: BlocBuilder<MovieNowPlayingBloc, MovieNowPlayingState>(
+        controller: _refreshController,
+        child: BlocConsumer<MovieNowPlayingBloc, MovieNowPlayingState>(
+          listener: (context, state) {
+            if (state is MovieNowPlayingHasData) {
+              _refreshController.refreshCompleted();
+            } else if (state is MovieNowPlayingError ||
+                state is MovieNowPlayingNoInternetConnection) {
+              _refreshController.refreshFailed();
+            }
+          },
           builder: (context, state) {
             if (state is MovieNowPlayingHasData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return ListView.builder(
                 itemCount: state.result.results.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -73,16 +74,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             } else if (state is MovieNowPlayingLoading) {
               return ShimmerList();
             } else if (state is MovieNowPlayingError) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.errorMessage);
             } else if (state is MovieNowPlayingNoData) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return CustomErrorWidget(message: state.message);
             } else if (state is MovieNowPlayingNoInternetConnection) {
-              _refreshCompleter.complete();
-              _refreshCompleter = Completer();
               return NoInternetWidget(
                 message: AppConstant.noInternetConnection,
                 onPressed: () => _loadMovieNowPlaying(context),

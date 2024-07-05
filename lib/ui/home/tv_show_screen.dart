@@ -1,23 +1,24 @@
 import 'dart:async';
-
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:moviecatalogue/ui/detail/detail_screen.dart';
-import 'package:moviecatalogue/ui/menu/menu.dart';
 import 'package:moviecatalogue/ui/tv_show/airing_today/airing_today_screen.dart';
 import 'package:moviecatalogue/ui/tv_show/on_the_air/on_the_air_screen.dart';
 import 'package:moviecatalogue/ui/tv_show/popular/tv_popular_screen.dart';
 import 'package:shared/shared.dart';
+
+import '../setting/setting_screen.dart';
 
 class TvShowScreen extends StatefulWidget {
   @override
   _TvShowScreenState createState() => _TvShowScreenState();
 }
 
-class _TvShowScreenState extends State<TvShowScreen> {
-  late Completer<void> _refreshCompleter;
+class _TvShowScreenState extends State<TvShowScreen>
+    with AutomaticKeepAliveClientMixin<TvShowScreen> {
   int _current = 0;
+  final smartRefresherController = RefreshController();
 
   _loadTvOnAir(BuildContext context) {
     context.read<TvOnTheAirBloc>().add(LoadTvOnTheAir());
@@ -31,17 +32,15 @@ class _TvShowScreenState extends State<TvShowScreen> {
     context.read<TvPopularBloc>().add(LoadTvPopular());
   }
 
-  Future<void> _refresh() {
+  void _refresh() {
     _loadTvOnAir(context);
     _loadTvAiring(context);
     _loadTvPopular(context);
-    return _refreshCompleter.future;
   }
 
   @override
   void initState() {
     super.initState();
-    _refreshCompleter = Completer<void>();
     _loadTvOnAir(context);
     _loadTvAiring(context);
     _loadTvPopular(context);
@@ -49,33 +48,23 @@ class _TvShowScreenState extends State<TvShowScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text('Tv Show'),
         centerTitle: true,
         actions: <Widget>[
-          // overflow menu
-          PopupMenuButton<Menu>(
-            icon: Icon(Icons.more_vert),
-            onSelected: (Menu menu) {
-              // Causes the app to rebuild with the new _selectedChoice.
-              Navigation.intent(context, menu.route);
-            },
-            itemBuilder: (BuildContext context) {
-              return menus.map((Menu menu) {
-                return PopupMenuItem<Menu>(
-                  value: menu,
-                  child: Text(menu.title),
-                );
-              }).toList();
-            },
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () =>
+                Navigation.intent(context, SettingScreen.routeName),
           ),
         ],
       ),
-      body: LiquidPullToRefresh(
+      body: SmartRefresher(
         onRefresh: _refresh,
-        showChildOpacityTransition: false,
+        controller: smartRefresherController,
         child: _buildBody(context),
       ),
     );
@@ -107,11 +96,17 @@ class _TvShowScreenState extends State<TvShowScreen> {
   }
 
   Widget _buildBanner(BuildContext context) {
-    return BlocBuilder<TvOnTheAirBloc, TvOnTheAirState>(
+    return BlocConsumer<TvOnTheAirBloc, TvOnTheAirState>(
+      listener: (context, state) {
+        if (state is TvOnTheAirHasData) {
+          smartRefresherController.refreshCompleted();
+        } else if (state is TvOnTheAirError ||
+            state is TvOnTheAirNoInternetConnection) {
+          smartRefresherController.refreshCompleted();
+        }
+      },
       builder: (context, state) {
         if (state is TvOnTheAirHasData) {
-          _refreshCompleter.complete();
-          _refreshCompleter = Completer();
           return BannerHome(
             isFromMovie: false,
             onPageChanged: (index, reason) {
@@ -127,16 +122,10 @@ class _TvShowScreenState extends State<TvShowScreen> {
         } else if (state is TvOnTheAirLoading) {
           return ShimmerBanner();
         } else if (state is TvOnTheAirError) {
-          _refreshCompleter.complete();
-          _refreshCompleter = Completer();
           return CustomErrorWidget(message: state.errorMessage);
         } else if (state is TvOnTheAirNoData) {
-          _refreshCompleter.complete();
-          _refreshCompleter = Completer();
           return CustomErrorWidget(message: state.message);
         } else if (state is TvOnTheAirNoInternetConnection) {
-          _refreshCompleter.complete();
-          _refreshCompleter = Completer();
           return NoInternetWidget(
             message: AppConstant.noInternetConnection,
             onPressed: () => _loadTvOnAir(context),
@@ -179,11 +168,17 @@ class _TvShowScreenState extends State<TvShowScreen> {
         Container(
           width: Sizes.width(context),
           height: Sizes.width(context) / 1.8,
-          child: BlocBuilder<TvAiringTodayBloc, TvAiringTodayState>(
+          child: BlocConsumer<TvAiringTodayBloc, TvAiringTodayState>(
+            listener: (context, state) {
+              if (state is TvAiringTodayHasData) {
+                smartRefresherController.refreshCompleted();
+              } else if (state is TvAiringTodayError ||
+                  state is TvAiringTodayNoInternetConnection) {
+                smartRefresherController.refreshFailed();
+              }
+            },
             builder: (context, state) {
               if (state is TvAiringTodayHasData) {
-                _refreshCompleter.complete();
-                _refreshCompleter = Completer();
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
@@ -210,16 +205,10 @@ class _TvShowScreenState extends State<TvShowScreen> {
               } else if (state is TvAiringTodayLoading) {
                 return ShimmerCard();
               } else if (state is TvAiringTodayError) {
-                _refreshCompleter.complete();
-                _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.errorMessage);
               } else if (state is TvAiringTodayNoData) {
-                _refreshCompleter.complete();
-                _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.message);
               } else if (state is TvAiringTodayNoInternetConnection) {
-                _refreshCompleter.complete();
-                _refreshCompleter = Completer();
                 return NoInternetWidget(
                   message: AppConstant.noInternetConnection,
                   onPressed: () => _loadTvAiring(context),
@@ -265,11 +254,17 @@ class _TvShowScreenState extends State<TvShowScreen> {
         Container(
           width: Sizes.width(context),
           height: Sizes.width(context) / 1.8,
-          child: BlocBuilder<TvPopularBloc, TvPopularState>(
+          child: BlocConsumer<TvPopularBloc, TvPopularState>(
+            listener: (context, state) {
+              if (state is TvPopularHasData) {
+                smartRefresherController.refreshCompleted();
+              } else if (state is TvPopularError ||
+                  state is TvPopularNoInternetConnection) {
+                smartRefresherController.refreshFailed();
+              }
+            },
             builder: (context, state) {
               if (state is TvPopularHasData) {
-                _refreshCompleter.complete();
-                _refreshCompleter = Completer();
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
@@ -296,16 +291,10 @@ class _TvShowScreenState extends State<TvShowScreen> {
               } else if (state is TvPopularLoading) {
                 return ShimmerCard();
               } else if (state is TvPopularError) {
-                _refreshCompleter.complete();
-                _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.errorMessage);
               } else if (state is TvPopularNoData) {
-                _refreshCompleter.complete();
-                _refreshCompleter = Completer();
                 return CustomErrorWidget(message: state.message);
               } else if (state is TvPopularNoInternetConnection) {
-                _refreshCompleter.complete();
-                _refreshCompleter = Completer();
                 return NoInternetWidget(
                   message: AppConstant.noInternetConnection,
                   onPressed: () => _loadTvPopular(context),
@@ -319,4 +308,7 @@ class _TvShowScreenState extends State<TvShowScreen> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

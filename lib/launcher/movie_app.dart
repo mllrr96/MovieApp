@@ -64,7 +64,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: Config.title,
       debugShowCheckedModeBanner: Config.isDebug,
-      theme: state.isDarkTheme ? Themes.darkTheme : Themes.lightTheme,
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
+      themeMode: state.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
       initialRoute: SplashScreen.routeName,
       routes: {
         SplashScreen.routeName: (context) => SplashScreen(),

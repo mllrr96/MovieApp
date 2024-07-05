@@ -58,14 +58,6 @@ class _DateWidgetState extends State<DateWidget> with TickerProviderStateMixin {
     }
   }
 
-  Color _backgroundColor() {
-    if (!_isDarkTheme) {
-      return ColorPalettes.white.withOpacity(.1);
-    } else {
-      return ColorPalettes.black.withOpacity(.1);
-    }
-  }
-
   bool get _isDarkTheme => Theme.of(context).brightness == Brightness.dark;
 
   @override

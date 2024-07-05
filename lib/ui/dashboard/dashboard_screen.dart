@@ -4,7 +4,6 @@ import 'package:moviecatalogue/ui/home/movie_screen.dart';
 import 'package:moviecatalogue/ui/home/tv_show_screen.dart';
 import 'package:shared/shared.dart';
 
-
 class DashBoardScreen extends StatefulWidget {
   static const routeName = '/';
   final String title;
