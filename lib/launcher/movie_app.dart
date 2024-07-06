@@ -53,20 +53,20 @@ class MyApp extends StatelessWidget {
           create: (context) => inject<ThemeBloc>(),
         ),
       ],
-      child: BlocBuilder<ThemeBloc, ThemeState>(
+      child: BlocBuilder<ThemeBloc, ThemeModeState>(
         builder: _buildWithTheme,
       ),
     );
   }
 
-  Widget _buildWithTheme(BuildContext context, ThemeState state) {
-    context.select((ThemeBloc themeBloc) => themeBloc.add(GetTheme()));
+  Widget _buildWithTheme(BuildContext context, ThemeModeState state) {
+    context.select((ThemeBloc themeBloc) => themeBloc.add(GetThemeMode()));
     return MaterialApp(
       title: Config.title,
       debugShowCheckedModeBanner: Config.isDebug,
       theme: Themes.lightTheme,
       darkTheme: Themes.darkTheme,
-      themeMode: state.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+      themeMode: state.themeMode,
       initialRoute: SplashScreen.routeName,
       routes: {
         SplashScreen.routeName: (context) => SplashScreen(),

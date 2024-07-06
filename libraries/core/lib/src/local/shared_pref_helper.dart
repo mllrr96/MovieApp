@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefHelper {
@@ -9,7 +10,8 @@ class SharedPrefHelper {
   static const _LAST_CHECKED = "last_checked";
   static const _CHECK_INTERVAL = "check_interval";
   static const _DATA = "data";
-  static const _THEME = "theme";
+  // static const _THEME = "theme";
+  static const _THEME_MODE = "theme_mode";
 
   // Interval 600000 means handle cache for 600000 milliseconds or 10 minutes
   Future<bool> storeCache(String key, String json,
@@ -56,11 +58,15 @@ class SharedPrefHelper {
     return map;
   }
 
-  Future saveValueDarkTheme(bool value) async {
-    preferences.setBool(_THEME, value);
+  Future saveThemeMode(ThemeMode value) async {
+    return preferences.setInt(_THEME_MODE, value.index);
   }
 
-  Future<bool> getValueDarkTheme() async {
-    return preferences.getBool(_THEME) ?? false;
+  Future<ThemeMode> getThemeMode() async {
+    int? themeIndex = preferences.getInt(_THEME_MODE);
+    if (themeIndex == null || themeIndex < 0 || themeIndex > 2) {
+      return ThemeMode.system;
+    }
+    return ThemeMode.values[themeIndex];
   }
 }

@@ -1,27 +1,26 @@
 import 'package:core/core.dart';
+import 'package:flutter/material.dart';
 
-class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
+class ThemeBloc extends Bloc<ThemeEvent, ThemeModeState> {
   final SharedPrefHelper prefHelper;
 
   ThemeBloc({required this.prefHelper})
-      : super(ThemeState(isDarkTheme: false)) {
-    on<ThemeChanged>(_onThemeChanged);
-    on<GetTheme>(_onGetTheme);
+      : super(ThemeModeState(ThemeMode.system)) {
+    on<ChangeThemeMode>(_onChangeThemeMode);
+    on<GetThemeMode>(_onGetThemeMode);
   }
 
-  void _onGetTheme(
-    GetTheme event,
-    Emitter<ThemeState> emit,
-  ) async {
-    final isDarkTheme = await prefHelper.getValueDarkTheme();
-    emit(ThemeState(isDarkTheme: isDarkTheme));
-  }
+  void _onGetThemeMode(
+    GetThemeMode event,
+    Emitter<ThemeModeState> emit,
+  ) async =>
+      emit(ThemeModeState(await prefHelper.getThemeMode()));
 
-  void _onThemeChanged(
-    ThemeChanged event,
-    Emitter<ThemeState> emit,
+  void _onChangeThemeMode(
+    ChangeThemeMode event,
+    Emitter<ThemeModeState> emit,
   ) async {
-    await prefHelper.saveValueDarkTheme(event.isDarkTheme);
-    emit(ThemeState(isDarkTheme: event.isDarkTheme));
+    await prefHelper.saveThemeMode(event.themeMode);
+    emit(ThemeModeState(event.themeMode));
   }
 }

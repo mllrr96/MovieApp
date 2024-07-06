@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shared/shared.dart';
+import 'package:intl/intl.dart';
 
 class CustomDialog extends StatelessWidget {
-  final bool groupValue;
-  final void Function(bool?)? onChanged;
+  final ThemeMode themeMode;
+  final void Function(ThemeMode?)? onChanged;
 
   CustomDialog({
-    required this.groupValue,
+    required this.themeMode,
     this.onChanged,
     super.key,
   });
@@ -15,30 +15,14 @@ class CustomDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: Text("Switch Theme"),
-      children: <Widget>[
-        RadioListTile(
-          value: true,
-          groupValue: groupValue,
+      children: ThemeMode.values.map((e) {
+        return RadioListTile(
+          title: Text(toBeginningOfSentenceCase(e.name)),
+          value: e,
+          groupValue: themeMode,
           onChanged: onChanged,
-          title: Text('Dark'),
-        ),
-        SizedBox(
-          height: Sizes.dp10(context),
-        ),
-        RadioListTile(
-          value: false,
-          groupValue: groupValue,
-          onChanged: onChanged,
-          title: Text('Light'),
-        ),
-        SizedBox(
-          height: Sizes.dp10(context),
-        ),
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text('Close'),
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 }

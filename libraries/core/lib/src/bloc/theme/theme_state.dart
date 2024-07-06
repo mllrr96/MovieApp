@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class ThemeState extends Equatable {
-  final bool isDarkTheme;
+class ThemeModeState extends Equatable {
+  final ThemeMode themeMode;
 
-  ThemeState({required this.isDarkTheme});
+  ThemeModeState(this.themeMode);
 
   @override
-  List<Object> get props => [isDarkTheme];
+  List<Object?> get props => [themeMode];
 }

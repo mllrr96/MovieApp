@@ -76,15 +76,15 @@ class SettingScreen extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return BlocBuilder<ThemeBloc, ThemeState>(
+                    return BlocBuilder<ThemeBloc, ThemeModeState>(
                       builder: (context, state) {
                         return CustomDialog(
-                          groupValue: state.isDarkTheme,
+                          themeMode: state.themeMode,
                           onChanged: (value) {
                             if (value == null) return;
                             context
                                 .read<ThemeBloc>()
-                                .add(ThemeChanged(isDarkTheme: value));
+                                .add(ChangeThemeMode(value));
                             Navigator.pop(context);
                           },
                         );

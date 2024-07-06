@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:shared/shared.dart';
+import 'package:flutter/services.dart';
 
 class Themes {
   static ThemeData lightTheme = ThemeData(
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
     useMaterial3: true,
     fontFamily: 'IBMPlexSans',
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
+        systemNavigationBarColor: Colors.white,
+      ),
+    ),
     // backgroundColor: ColorPalettes.lightBG,
     // primaryColor: ColorPalettes.lightPrimary,
     // accentColor:  ColorPalettes.lightAccent,
@@ -28,6 +33,12 @@ class Themes {
         seedColor: Colors.deepOrange, brightness: Brightness.dark),
     useMaterial3: true,
     fontFamily: 'IBMPlexSans',
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
+        systemNavigationBarColor: Colors.black,
+      ),
+    ),
+
     // brightness: Brightness.dark,
     // backgroundColor: ColorPalettes.darkBG,
     // primaryColor: ColorPalettes.darkPrimary,

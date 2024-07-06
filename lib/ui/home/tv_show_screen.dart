@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +55,7 @@ class _TvShowScreenState extends State<TvShowScreen>
         centerTitle: true,
         actions: <Widget>[
           IconButton(
+            padding: EdgeInsets.all(16.0),
             icon: Icon(Icons.settings),
             onPressed: () =>
                 Navigation.intent(context, SettingScreen.routeName),

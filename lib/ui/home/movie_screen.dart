@@ -37,6 +37,7 @@ class _MovieScreenState extends State<MovieScreen>
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
+            padding: EdgeInsets.all(16.0),
             onPressed: () =>
                 Navigation.intent(context, SettingScreen.routeName),
           ),
