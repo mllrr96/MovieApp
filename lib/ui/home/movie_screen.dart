@@ -120,6 +120,7 @@ class _MovieScreenState extends State<MovieScreen>
                               Icons.arrow_forward_ios,
                               size: Sizes.dp16(context),
                             ),
+                            padding: EdgeInsets.all(16),
                             onPressed: () {
                               Navigation.intent(
                                   context, UpComingScreen.routeName);
@@ -212,6 +213,7 @@ class _MovieScreenState extends State<MovieScreen>
                               Icons.arrow_forward_ios,
                               size: Sizes.dp16(context),
                             ),
+                            padding: EdgeInsets.all(16),
                             onPressed: () {
                               Navigation.intent(
                                   context, MoviePopularScreen.routeName);

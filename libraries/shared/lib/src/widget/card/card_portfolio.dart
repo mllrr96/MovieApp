@@ -18,7 +18,7 @@ class CardPortfolio extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(Sizes.dp5(context)),
       child: InkWell(
-        onTap: () => Navigation.launchURL(url),
+        onTap: () => Navigation.launchURL(Uri.parse(url)),
         child: Card(
           child: Padding(
             padding: EdgeInsets.all(Sizes.dp10(context)),

@@ -50,43 +50,40 @@ class MyApp extends StatelessWidget {
           create: (context) => inject<CrewBloc>(),
         ),
         BlocProvider<ThemeBloc>(
-          create: (context) => inject<ThemeBloc>(),
+          create: (context) => inject<ThemeBloc>()..add(GetThemeMode()),
         ),
       ],
       child: BlocBuilder<ThemeBloc, ThemeModeState>(
-        builder: _buildWithTheme,
+        builder: (context, state) {
+          return MaterialApp(
+            title: Config.title,
+            debugShowCheckedModeBanner: Config.isDebug,
+            theme: Themes.lightTheme,
+            darkTheme: Themes.darkTheme,
+            themeMode: state.themeMode,
+            initialRoute: SplashScreen.routeName,
+            routes: {
+              SplashScreen.routeName: (context) => SplashScreen(),
+              DashBoardScreen.routeName: (context) =>
+                  DashBoardScreen(title: Config.title),
+              DiscoverScreen.routeName: (context) => DiscoverScreen(),
+              NowPlayingScreen.routeName: (context) => NowPlayingScreen(),
+              MoviePopularScreen.routeName: (context) => MoviePopularScreen(),
+              UpComingScreen.routeName: (context) => UpComingScreen(),
+              AiringTodayScreen.routeName: (context) => AiringTodayScreen(),
+              OnTheAirScreen.routeName: (context) => OnTheAirScreen(),
+              TvPopularScreen.routeName: (context) => TvPopularScreen(),
+              DetailScreen.routeName: (context) => DetailScreen(
+                    arguments: ModalRoute.of(context)?.settings.arguments
+                        as ScreenArguments,
+                  ),
+              SettingScreen.routeName: (context) => SettingScreen(),
+              AboutScreen.routeName: (context) => AboutScreen(),
+              BookingScreen.routeName: (context) => BookingScreen(),
+            },
+          );
+        },
       ),
-    );
-  }
-
-  Widget _buildWithTheme(BuildContext context, ThemeModeState state) {
-    context.select((ThemeBloc themeBloc) => themeBloc.add(GetThemeMode()));
-    return MaterialApp(
-      title: Config.title,
-      debugShowCheckedModeBanner: Config.isDebug,
-      theme: Themes.lightTheme,
-      darkTheme: Themes.darkTheme,
-      themeMode: state.themeMode,
-      initialRoute: SplashScreen.routeName,
-      routes: {
-        SplashScreen.routeName: (context) => SplashScreen(),
-        DashBoardScreen.routeName: (context) =>
-            DashBoardScreen(title: Config.title),
-        DiscoverScreen.routeName: (context) => DiscoverScreen(),
-        NowPlayingScreen.routeName: (context) => NowPlayingScreen(),
-        MoviePopularScreen.routeName: (context) => MoviePopularScreen(),
-        UpComingScreen.routeName: (context) => UpComingScreen(),
-        AiringTodayScreen.routeName: (context) => AiringTodayScreen(),
-        OnTheAirScreen.routeName: (context) => OnTheAirScreen(),
-        TvPopularScreen.routeName: (context) => TvPopularScreen(),
-        DetailScreen.routeName: (context) => DetailScreen(
-              arguments:
-                  ModalRoute.of(context)?.settings.arguments as ScreenArguments,
-            ),
-        SettingScreen.routeName: (context) => SettingScreen(),
-        AboutScreen.routeName: (context) => AboutScreen(),
-        BookingScreen.routeName: (context) => BookingScreen(),
-      },
     );
   }
 }

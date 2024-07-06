@@ -1,17 +1,9 @@
-# Movie App
-![GitHub stars](https://img.shields.io/github/stars/rrifafauzikomara/MovieCatalogue?style=social)
-![GitHub forks](https://img.shields.io/github/forks/rrifafauzikomara/MovieCatalogue?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/rrifafauzikomara/MovieCatalogue?style=social)
 
-[![Codemagic build status](https://api.codemagic.io/apps/5ec63ade43c9304d454e75e7/5ec64f3243c9304d454e7682/status_badge.svg)](https://codemagic.io/apps/5ec63ade43c9304d454e75e7/5ec64f3243c9304d454e7682/latest_build)
 [![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![platform](https://img.shields.io/badge/platform-Flutter-blue.svg)](https://flutter.dev/)
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/rrifafauzikomara/MovieCatalogue)
 
-
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height=
-"80">](https://play.google.com/store/apps/details?id=id.rifafauzi.movie)
-
+An updated version of [Movie App](https://github.com/rrifafauzikomara/MovieApp) that supports null-saftey.
 
 ## Features
 *  Switch Theme (Dark and Light) by App 🔥
@@ -137,6 +129,10 @@ flutter drive --target=test_driver/app.dart --flavor development
 
 Don't forget to follow me, fork and give me a ⭐
 
+
+## Updater
+
+* **Mohammed Ragheb**
 
 ## License
 

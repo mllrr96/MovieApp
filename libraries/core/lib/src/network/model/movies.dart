@@ -8,7 +8,7 @@ class Result extends Equatable {
   @JsonKey(name: 'results')
   final List<Movies> results;
 
-  const Result([this.results = const []]);
+  const Result(this.results);
 
   @override
   List<Object> get props => [results];

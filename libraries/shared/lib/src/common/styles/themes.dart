@@ -3,12 +3,13 @@ import 'package:flutter/services.dart';
 
 class Themes {
   static ThemeData lightTheme = ThemeData(
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
     useMaterial3: true,
     fontFamily: 'IBMPlexSans',
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
         systemNavigationBarColor: Colors.white,
+        statusBarColor: Colors.white,
       ),
     ),
     // backgroundColor: ColorPalettes.lightBG,
@@ -30,12 +31,15 @@ class Themes {
 
   static ThemeData darkTheme = ThemeData(
     colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepOrange, brightness: Brightness.dark),
+      seedColor: Colors.orange,
+      brightness: Brightness.dark,
+    ),
     useMaterial3: true,
     fontFamily: 'IBMPlexSans',
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
         systemNavigationBarColor: Colors.black,
+        statusBarColor: Colors.black,
       ),
     ),
 

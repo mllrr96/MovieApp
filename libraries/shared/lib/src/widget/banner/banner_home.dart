@@ -108,8 +108,8 @@ class BannerHome extends StatelessWidget {
             ),
           ),
         Spacer(),
-        GestureDetector(
-          onTap: () {
+        TextButton(
+          onPressed: () {
             Navigation.intent(context, routeNameAll);
           },
           child: Text(

@@ -20,33 +20,62 @@ class SettingScreen extends StatelessWidget {
         centerTitle: true,
       ),
       bottomNavigationBar: BottomAppBar(
+        height: 100,
         child: Container(
-          height: Sizes.dp30(context),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          // height: Sizes.dp30(context),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                '© 2024 Movie Catalogue',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '© 2024 Movie Catalogue',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Updated by Mohammed Ragheb',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    FutureBuilder<String>(
+                      future: _getVersion(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        var verInfo = "";
+                        if (snapshot.hasData) {
+                          verInfo = "v ${snapshot.data}";
+                          return Container(
+                            child: Text(
+                              verInfo,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ),
-              FutureBuilder<String>(
-                future: _getVersion(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  var verInfo = "";
-                  if (snapshot.hasData) {
-                    verInfo = "v ${snapshot.data}";
-                  }
-                  return Container(
-                    child: Text(
-                      verInfo,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  );
-                },
-              ),
+              IconButton(
+                  icon: Image.asset(
+                    ImagesAssets.github,
+                    scale: 10,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? ColorPalettes.white
+                        : ColorPalettes.black,
+                  ),
+                  onPressed: () {
+                    Navigation.launchURL(
+                        Uri.parse(UrlConstant.urlGitHubUpdater));
+                  }),
             ],
           ),
         ),
@@ -75,22 +104,14 @@ class SettingScreen extends StatelessWidget {
               onTap: () {
                 showDialog(
                   context: context,
-                  builder: (context) {
-                    return BlocBuilder<ThemeBloc, ThemeModeState>(
-                      builder: (context, state) {
-                        return CustomDialog(
-                          themeMode: state.themeMode,
-                          onChanged: (value) {
-                            if (value == null) return;
-                            context
-                                .read<ThemeBloc>()
-                                .add(ChangeThemeMode(value));
-                            Navigator.pop(context);
-                          },
-                        );
-                      },
-                    );
-                  },
+                  builder: (context) => CustomDialog(
+                    themeMode: context.read<ThemeBloc>().state.themeMode,
+                    onChanged: (value) {
+                      if (value == null) return;
+                      context.read<ThemeBloc>().add(ChangeThemeMode(value));
+                      Navigator.pop(context);
+                    },
+                  ),
                 );
               },
             ),

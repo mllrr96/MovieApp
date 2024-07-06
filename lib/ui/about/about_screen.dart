@@ -51,7 +51,7 @@ class AboutScreen extends StatelessWidget {
                             SizedBox(height: Sizes.dp5(context)),
                             GestureDetector(
                               onTap: () => Navigation.launchURL(
-                                  UrlConstant.urlInstagram),
+                                  Uri.parse(UrlConstant.urlInstagram)),
                               child: Row(
                                 children: <Widget>[
                                   Image.asset(

@@ -33,7 +33,7 @@ class Navigation {
   // For this it's not working
   // www.flutter.dev
   // flutter.dev
-  static launchURL(url) async {
+  static launchURL(Uri url) async {
     try {
       await launchUrl(url);
     } catch (e) {

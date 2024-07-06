@@ -59,7 +59,7 @@ Widget buildRatingBar(ThemeData theme, BuildContext context, double rating) {
   for (var i = 1; i <= 5; i++) {
     // var color = i <= rating / 2 ? theme.accentColor : ColorPalettes.grey;
     var color =
-        i <= rating / 2 ? theme.colorScheme.secondary : ColorPalettes.grey;
+        i <= rating / 2 ? theme.colorScheme.primary : ColorPalettes.grey;
     var star = Icon(
       Icons.star,
       color: color,

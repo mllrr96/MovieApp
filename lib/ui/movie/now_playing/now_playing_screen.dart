@@ -29,65 +29,68 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Now Playing Movies'),
-        centerTitle: true,
-      ),
-      body: SmartRefresher(
-        onRefresh: _refresh,
-        controller: _refreshController,
-        child: BlocConsumer<MovieNowPlayingBloc, MovieNowPlayingState>(
-          listener: (context, state) {
-            if (state is MovieNowPlayingHasData) {
-              _refreshController.refreshCompleted();
-            } else if (state is MovieNowPlayingError ||
-                state is MovieNowPlayingNoInternetConnection) {
-              _refreshController.refreshFailed();
-            }
-          },
-          builder: (context, state) {
-            if (state is MovieNowPlayingHasData) {
-              return ListView.builder(
-                itemCount: state.result.results.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Movies movies = state.result.results[index];
-                  return CardMovies(
-                    image: movies.posterPath ?? '',
-                    title: movies.title ?? '',
-                    vote: movies.voteAverage.toString(),
-                    releaseDate: movies.releaseDate ?? '',
-                    overview: movies.overview ?? '',
-                    genre:
-                        movies.genreIds?.take(3).map(buildGenreChip).toList() ??
-                            [],
-                    onTap: () {
-                      Navigation.intentWithData(
-                        context,
-                        DetailScreen.routeName,
-                        ScreenArguments(movies, true, false),
-                      );
-                    },
-                  );
-                },
-              );
-            } else if (state is MovieNowPlayingLoading) {
-              return ShimmerList();
-            } else if (state is MovieNowPlayingError) {
-              return CustomErrorWidget(message: state.errorMessage);
-            } else if (state is MovieNowPlayingNoData) {
-              return CustomErrorWidget(message: state.message);
-            } else if (state is MovieNowPlayingNoInternetConnection) {
-              return NoInternetWidget(
-                message: AppConstant.noInternetConnection,
-                onPressed: () => _loadMovieNowPlaying(context),
-              );
-            } else {
-              return Center(child: Text(""));
-            }
-          },
-        ),
-      ),
+    return BlocConsumer<MovieNowPlayingBloc, MovieNowPlayingState>(
+      listener: (context, state) {
+        if (state is MovieNowPlayingHasData) {
+          _refreshController.refreshCompleted();
+        } else if (state is MovieNowPlayingError ||
+            state is MovieNowPlayingNoInternetConnection) {
+          _refreshController.refreshFailed();
+        }
+      },
+      builder: (context, state) {
+        Widget _buildNowPlaying() {
+          if (state is MovieNowPlayingHasData) {
+            return ListView.builder(
+              itemCount: state.result.results.length,
+              itemBuilder: (BuildContext context, int index) {
+                Movies movies = state.result.results[index];
+                return CardMovies(
+                  image: movies.posterPath ?? '',
+                  title: movies.title ?? '',
+                  vote: movies.voteAverage.toString(),
+                  releaseDate: movies.releaseDate ?? '',
+                  overview: movies.overview ?? '',
+                  genre:
+                      movies.genreIds?.take(3).map(buildGenreChip).toList() ??
+                          [],
+                  onTap: () {
+                    Navigation.intentWithData(
+                      context,
+                      DetailScreen.routeName,
+                      ScreenArguments(movies, true, false),
+                    );
+                  },
+                );
+              },
+            );
+          } else if (state is MovieNowPlayingLoading) {
+            return ShimmerList();
+          } else if (state is MovieNowPlayingError) {
+            return CustomErrorWidget(message: state.errorMessage);
+          } else if (state is MovieNowPlayingNoData) {
+            return CustomErrorWidget(message: state.message);
+          } else if (state is MovieNowPlayingNoInternetConnection) {
+            return NoInternetWidget(
+              message: AppConstant.noInternetConnection,
+              onPressed: () => _loadMovieNowPlaying(context),
+            );
+          } else {
+            return Center(child: Text(""));
+          }
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Now Playing Movies'),
+            centerTitle: true,
+          ),
+          body: SmartRefresher(
+              onRefresh: _refresh,
+              controller: _refreshController,
+              child: _buildNowPlaying()),
+        );
+      },
     );
   }
 }

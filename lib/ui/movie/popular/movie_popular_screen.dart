@@ -22,68 +22,71 @@ class _MoviePopularScreenState extends State<MoviePopularScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Popular Movies'),
-        centerTitle: true,
-      ),
-      body: SmartRefresher(
-        onRefresh: () async {
-          context.read<MoviePopularBloc>().add(LoadMoviePopular());
-        },
-        controller: _refreshController,
-        child: BlocConsumer<MoviePopularBloc, MoviePopularState>(
-          listener: (context, state) {
-            if (state is MoviePopularHasData) {
-              _refreshController.refreshCompleted();
-            } else if (state is MoviePopularError ||
-                state is MoviePopularNoInternetConnection) {
-              _refreshController.refreshFailed();
-            }
-          },
-          builder: (context, state) {
-            if (state is MoviePopularHasData) {
-              return ListView.builder(
-                itemCount: state.result.results.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Movies movies = state.result.results[index];
-                  return CardMovies(
-                    image: movies.posterPath ?? '',
-                    title: movies.title ?? '',
-                    vote: movies.voteAverage.toString(),
-                    releaseDate: movies.releaseDate ?? '',
-                    overview: movies.overview ?? '',
-                    genre:
-                        movies.genreIds?.take(3).map(buildGenreChip).toList() ??
-                            [],
-                    onTap: () {
-                      Navigation.intentWithData(
-                        context,
-                        DetailScreen.routeName,
-                        ScreenArguments(movies, true, false),
-                      );
-                    },
-                  );
-                },
-              );
-            } else if (state is MoviePopularLoading) {
-              return ShimmerList();
-            } else if (state is MoviePopularError) {
-              return CustomErrorWidget(message: state.errorMessage);
-            } else if (state is MoviePopularNoData) {
-              return CustomErrorWidget(message: state.message);
-            } else if (state is MoviePopularNoInternetConnection) {
-              return NoInternetWidget(
-                message: AppConstant.noInternetConnection,
-                onPressed: () =>
-                    context.read<MoviePopularBloc>().add(LoadMoviePopular()),
-              );
-            } else {
-              return Center(child: Text(""));
-            }
-          },
-        ),
-      ),
+    return BlocConsumer<MoviePopularBloc, MoviePopularState>(
+      listener: (context, state) {
+        if (state is MoviePopularHasData) {
+          _refreshController.refreshCompleted();
+        } else if (state is MoviePopularError ||
+            state is MoviePopularNoInternetConnection) {
+          _refreshController.refreshFailed();
+        }
+      },
+      builder: (context, state) {
+        Widget _buildMoviePopular() {
+          if (state is MoviePopularHasData) {
+            return ListView.builder(
+              itemCount: state.result.results.length,
+              itemBuilder: (BuildContext context, int index) {
+                Movies movies = state.result.results[index];
+                return CardMovies(
+                  image: movies.posterPath ?? '',
+                  title: movies.title ?? '',
+                  vote: movies.voteAverage.toString(),
+                  releaseDate: movies.releaseDate ?? '',
+                  overview: movies.overview ?? '',
+                  genre:
+                      movies.genreIds?.take(3).map(buildGenreChip).toList() ??
+                          [],
+                  onTap: () {
+                    Navigation.intentWithData(
+                      context,
+                      DetailScreen.routeName,
+                      ScreenArguments(movies, true, false),
+                    );
+                  },
+                );
+              },
+            );
+          } else if (state is MoviePopularLoading) {
+            return ShimmerList();
+          } else if (state is MoviePopularError) {
+            return CustomErrorWidget(message: state.errorMessage);
+          } else if (state is MoviePopularNoData) {
+            return CustomErrorWidget(message: state.message);
+          } else if (state is MoviePopularNoInternetConnection) {
+            return NoInternetWidget(
+              message: AppConstant.noInternetConnection,
+              onPressed: () =>
+                  context.read<MoviePopularBloc>().add(LoadMoviePopular()),
+            );
+          } else {
+            return Center(child: Text(""));
+          }
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Popular Movies'),
+            centerTitle: true,
+          ),
+          body: SmartRefresher(
+              onRefresh: () async {
+                context.read<MoviePopularBloc>().add(LoadMoviePopular());
+              },
+              controller: _refreshController,
+              child: _buildMoviePopular()),
+        );
+      },
     );
   }
 }

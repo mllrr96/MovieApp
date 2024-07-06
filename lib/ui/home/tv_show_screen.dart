@@ -158,6 +158,7 @@ class _TvShowScreenState extends State<TvShowScreen>
                   Icons.arrow_forward_ios,
                   size: Sizes.dp16(context),
                 ),
+                padding: EdgeInsets.all(16),
                 onPressed: () {
                   Navigation.intent(context, AiringTodayScreen.routeName);
                 },
@@ -244,6 +245,7 @@ class _TvShowScreenState extends State<TvShowScreen>
                   Icons.arrow_forward_ios,
                   size: Sizes.dp16(context),
                 ),
+                padding: EdgeInsets.all(16),
                 onPressed: () {
                   Navigation.intent(context, TvPopularScreen.routeName);
                 },
